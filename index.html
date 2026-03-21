@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body data-city="amsterdam">
   <div class="page-bg" aria-hidden="true">
     <div class="page-bg__parallax"></div>
     <div class="page-bg__tint"></div>
@@ -18,7 +18,25 @@
 
   <div class="feed-backdrop" id="feed-backdrop" hidden></div>
 
+  <nav class="city-arrows" aria-label="Switch city">
+    <span class="city-arrows__hit city-arrows__hit--disabled" aria-current="page" title="Amsterdam">
+      <svg class="city-arrows__icon" viewBox="0 0 24 24" aria-hidden="true">
+        <polyline class="city-arrows__stroke" points="15 18 9 12 15 6" />
+      </svg>
+    </span>
+    <a href="paris.html" class="city-arrows__hit" aria-label="Go to Paris">
+      <svg class="city-arrows__icon" viewBox="0 0 24 24" aria-hidden="true">
+        <polyline class="city-arrows__stroke" points="9 18 15 12 9 6" />
+      </svg>
+    </a>
+  </nav>
+
   <header class="masthead">
+    <nav class="city-nav" aria-label="Trip cities">
+      <a href="index.html" class="city-nav__link city-nav__link--current" aria-current="page">Amsterdam</a>
+      <span class="city-nav__sep" aria-hidden="true">·</span>
+      <a href="paris.html" class="city-nav__link">Paris</a>
+    </nav>
     <h1 class="masthead__title">Amsterdam</h1>
     <p class="masthead__kicker">De Pijp</p>
   </header>
@@ -344,6 +362,21 @@
       </div>
     </article>
   </main>
+
+  <section class="map-block" aria-label="Map of De Pijp, Amsterdam">
+    <div class="map-block__frame">
+      <iframe
+        title="De Pijp, Amsterdam on Google Maps"
+        src="https://www.google.com/maps?q=De+Pijp,+Amsterdam,+Netherlands&amp;z=14&amp;hl=en&amp;output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen
+      ></iframe>
+    </div>
+    <p class="map-block__note">
+      <a href="https://www.google.com/maps/search/?api=1&amp;query=De+Pijp+Amsterdam+Netherlands" rel="noopener noreferrer" target="_blank">Open in Google Maps</a>
+    </p>
+  </section>
 
   <footer class="foot">
     <p>De Pijp</p>

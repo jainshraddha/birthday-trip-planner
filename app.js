@@ -239,3 +239,70 @@
     window.visualViewport.addEventListener("resize", onViewportChange, { passive: true });
   }
 })();
+
+(function citySlide() {
+  const city = document.body.dataset.city;
+  if (city !== "amsterdam" && city !== "paris") return;
+
+  const SWIPE_MIN = 56;
+  const SWIPE_VERTICAL_CAP = 110;
+
+  function modalOpen() {
+    return document.body.classList.contains("feed-modal-open");
+  }
+
+  function goAmsterdam() {
+    window.location.href = "index.html";
+  }
+
+  function goParis() {
+    window.location.href = "paris.html";
+  }
+
+  function trySwipe(dx, dy) {
+    if (modalOpen()) return;
+    if (Math.abs(dx) < SWIPE_MIN) return;
+    if (Math.abs(dy) > SWIPE_VERTICAL_CAP && Math.abs(dy) > Math.abs(dx)) return;
+    if (city === "amsterdam" && dx < 0) goParis();
+    else if (city === "paris" && dx > 0) goAmsterdam();
+  }
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  document.addEventListener(
+    "touchstart",
+    (e) => {
+      if (e.touches.length !== 1) return;
+      const el = e.target;
+      if (el.closest && el.closest("iframe, a, button, input, textarea, select, label")) return;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    },
+    { passive: true }
+  );
+
+  document.addEventListener(
+    "touchend",
+    (e) => {
+      if (e.changedTouches.length !== 1) return;
+      const t = e.changedTouches[0];
+      trySwipe(t.clientX - touchStartX, t.clientY - touchStartY);
+    },
+    { passive: true }
+  );
+
+  document.addEventListener("keydown", (e) => {
+    if (modalOpen()) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const t = e.target;
+    if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT")) return;
+    if (e.key === "ArrowRight" && city === "amsterdam") {
+      e.preventDefault();
+      goParis();
+    } else if (e.key === "ArrowLeft" && city === "paris") {
+      e.preventDefault();
+      goAmsterdam();
+    }
+  });
+})();

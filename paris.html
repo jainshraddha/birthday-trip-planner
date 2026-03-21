@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Paris — Le Marais</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="page-paris" data-city="paris">
+  <div class="page-bg" aria-hidden="true">
+    <div class="page-bg__parallax"></div>
+    <div class="page-bg__tint"></div>
+  </div>
+  <div class="noise" aria-hidden="true"></div>
+
+  <div class="feed-backdrop" id="feed-backdrop" hidden></div>
+
+  <nav class="city-arrows" aria-label="Switch city">
+    <a href="index.html" class="city-arrows__hit" aria-label="Go to Amsterdam">
+      <svg class="city-arrows__icon" viewBox="0 0 24 24" aria-hidden="true">
+        <polyline class="city-arrows__stroke" points="15 18 9 12 15 6" />
+      </svg>
+    </a>
+    <span class="city-arrows__hit city-arrows__hit--disabled" aria-current="page" title="Paris">
+      <svg class="city-arrows__icon" viewBox="0 0 24 24" aria-hidden="true">
+        <polyline class="city-arrows__stroke" points="9 18 15 12 9 6" />
+      </svg>
+    </span>
+  </nav>
+
+  <header class="masthead">
+    <nav class="city-nav" aria-label="Trip cities">
+      <a href="index.html" class="city-nav__link">Amsterdam</a>
+      <span class="city-nav__sep" aria-hidden="true">·</span>
+      <a href="paris.html" class="city-nav__link city-nav__link--current" aria-current="page">Paris</a>
+    </nav>
+    <h1 class="masthead__title">Paris</h1>
+    <p class="masthead__kicker">Le Marais</p>
+  </header>
+
+  <main class="feed" aria-label="Paris vibes">
+    <article class="feed__pin feed__pin--interactive">
+      <div class="feed__pin__card" tabindex="0" aria-expanded="false" aria-haspopup="dialog" aria-label="Open details: Paris from above — rooftops">
+        <div class="feed__pin__media">
+          <img
+            class="img--paris-montmartre"
+            src="https://images.unsplash.com/photo-1431278765059-40542df42141?auto=format&amp;fit=crop&amp;w=900&amp;q=80"
+            alt="Dense Paris rooftops and chimneys from above"
+            width="600"
+            height="900"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+        <div class="feed__pin__detail" hidden>
+          <div class="feed__pin__detail-body">
+            <p>
+              Zinc, chimneys, skylights, and terraces tangled together—Paris from above is a texture study in grey and blue. We’ll find a viewpoint, lean on the railing, and play “guess that monument” without keeping score.
+            </p>
+            <p>
+              Montmartre and Sacré-Cœur get their own climb another day; this is pure roofscape calm.
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="feed__pin feed__pin--interactive feed__pin--video">
+      <div class="feed__pin__card" tabindex="0" aria-expanded="false" aria-haspopup="dialog" aria-label="Open details: Weekend in Paris video">
+        <div class="feed__pin__media feed__pin__media--video">
+          <iframe
+            title="A weekend in Paris — travel reel"
+            src="https://assets.pinterest.com/ext/embed.html?id=38913984276959887"
+            loading="lazy"
+            allowfullscreen
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+        <div class="feed__pin__detail" hidden>
+          <div class="feed__pin__detail-body">
+            <p>
+              A Pinterest reel that stitches together weekend Paris—Montmartre corners, Luxembourg gardens, pink facades, train-station ceilings, river light, and more. Use it as a mood board for “what we might wander toward” without turning it into a checklist.
+            </p>
+            <p>
+              Pin: <a href="https://www.pinterest.com/pin/38913984276959887/" rel="noopener noreferrer" target="_blank">A weekend in Paris</a> (Take My Heart Everywhere).
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="feed__pin feed__pin--interactive feed__pin--video">
+      <div class="feed__pin__card" tabindex="0" aria-expanded="false" aria-haspopup="dialog" aria-label="Open details: Morning in Paris video">
+        <div class="feed__pin__media feed__pin__media--video">
+          <iframe
+            title="Morning in Paris video"
+            src="https://assets.pinterest.com/ext/embed.html?id=409616528614558235"
+            loading="lazy"
+            allowfullscreen
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+        <div class="feed__pin__detail" hidden>
+          <div class="feed__pin__detail-body">
+            <p>
+              Soft morning light over the city—good for coffee-in-hand daydreaming before we commit to a route. Keep sound optional; let the cuts set the pace.
+            </p>
+            <p>
+              Pin: <a href="https://www.pinterest.com/pin/409616528614558235/" rel="noopener noreferrer" target="_blank">Morning in Paris</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="feed__pin feed__pin--interactive feed__pin--video">
+      <div class="feed__pin__card" tabindex="0" aria-expanded="false" aria-haspopup="dialog" aria-label="Open details: Le Marais neighborhood reel">
+        <div class="feed__pin__media feed__pin__media--video">
+          <iframe
+            title="Le Marais Paris — neighborhood tips reel"
+            src="https://assets.pinterest.com/ext/embed.html?id=547398529722854976"
+            loading="lazy"
+            allowfullscreen
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+        <div class="feed__pin__detail" hidden>
+          <div class="feed__pin__detail-body">
+            <p>
+              A short reel focused on Le Marais—landmarks like the Picasso Museum and Place des Vosges, plus the neighborhood’s street-art walls. Good inspiration for a loose walking loop without turning the day into a scavenger hunt.
+            </p>
+            <p>
+              Pin: <a href="https://www.pinterest.com/pin/547398529722854976/" rel="noopener noreferrer" target="_blank">Unlock the Secrets of Le Marais</a> (Felipe Prado).
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="feed__pin feed__pin--interactive">
+      <div class="feed__pin__card" tabindex="0" aria-expanded="false" aria-haspopup="dialog" aria-label="Open details: Café street toward the Eiffel Tower">
+        <div class="feed__pin__media">
+          <img
+            class="img--paris-cafe-eiffel"
+            src="assets/paris-cafe-eiffel-street.png"
+            alt="Paris cobblestone street with striped café awning, wicker chairs, and the Eiffel Tower in the distance"
+            width="600"
+            height="900"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="feed__pin__detail" hidden>
+          <div class="feed__pin__detail-body">
+            <p>
+              Striped awning, checkered cloths, cobbles catching the sun—and the tower framed perfectly down the curve of the street. The postcard and the real city line up for once; we’ll stand here long enough to believe it.
+            </p>
+            <p>
+              Order something small if the terrace is open, or just take the photo and keep walking while the light is honest.
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="feed__pin feed__pin--interactive">
+      <div class="feed__pin__card" tabindex="0" aria-expanded="false" aria-haspopup="dialog" aria-label="Open details: Seine at blue hour">
+        <div class="feed__pin__media">
+          <img
+            class="img--paris-seine"
+            src="assets/paris-seine-evening.png"
+            alt="Evening light on the Seine in Paris with bridges and reflections"
+            width="600"
+            height="900"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="feed__pin__detail" hidden>
+          <div class="feed__pin__detail-body">
+            <p>
+              The Seine after sunset is all ribbon-lights and soft reflections—boats tied up, bridges repeating, the city unbuttoning into night. It’s the walk we take when we don’t care about an agenda, only the next corner and the next glow on the water.
+            </p>
+            <p>
+              We’ll loop until our feet complain, then duck into whatever side street looks warm.
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="feed__pin feed__pin--interactive">
+      <div class="feed__pin__card" tabindex="0" aria-expanded="false" aria-haspopup="dialog" aria-label="Open details: Haussmann boulevards">
+        <div class="feed__pin__media">
+          <img
+            class="img--paris-haussmann"
+            src="https://images.unsplash.com/photo-1509439581779-6298f75bf6b5?auto=format&amp;fit=crop&amp;w=900&amp;q=80"
+            alt="Classic Paris Haussmann buildings along a wide boulevard"
+            width="600"
+            height="900"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="feed__pin__detail" hidden>
+          <div class="feed__pin__detail-body">
+            <p>
+              Balconies, mansard roofs, stone that looks carved for postcards—Haussmann Paris is symmetry with swagger. Walking these boulevards is free architecture school: look up for the ironwork, sideways for the shopfronts, down only to avoid stepping in someone’s latte.
+            </p>
+            <p>
+              We’ll cut through on the way between museums and snacks, no lecture required.
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="feed__pin feed__pin--interactive">
+      <div class="feed__pin__card" tabindex="0" aria-expanded="false" aria-haspopup="dialog" aria-label="Open details: Île de la Cité and the river">
+        <div class="feed__pin__media">
+          <img
+            class="img--paris-river"
+            src="https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?auto=format&amp;fit=crop&amp;w=900&amp;q=80"
+            alt="Notre-Dame and Seine riverfront in Paris"
+            width="600"
+            height="900"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="feed__pin__detail" hidden>
+          <div class="feed__pin__detail-body">
+            <p>
+              The island in the middle of everything: spires, bridges, tourists, and pigeons with main-character energy. Even as the city reshapes around it, the river keeps its rhythm—slow barges, fast selfies, the same light bouncing off stone we’ve seen in a hundred films.
+            </p>
+            <p>
+              We’ll cross a bridge twice on purpose, once for photos and once for the breeze.
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="feed__pin feed__pin--interactive">
+      <div class="feed__pin__card" tabindex="0" aria-expanded="false" aria-haspopup="dialog" aria-label="Open details: Pâtisserie and sweets">
+        <div class="feed__pin__media">
+          <img
+            class="img--paris-pastry"
+            src="assets/paris-patisserie-macarons.png"
+            alt="Gold trays of colorful macarons on a marble counter in a Paris patisserie, chalkboard menu in the background"
+            width="576"
+            height="1024"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="feed__pin__detail" hidden>
+          <div class="feed__pin__detail-body">
+            <p>
+              Rows of macarons on gold trays, marble catching the warm light, a chalkboard menu promising more than you have room for. A Paris pastry case is a mood board for joy—pick two, share three, argue politely about who gets the last bite.
+            </p>
+            <p>
+              Calories on vacation don’t count; that’s science (citation: us).
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="feed__pin feed__pin--interactive">
+      <div class="feed__pin__card" tabindex="0" aria-expanded="false" aria-haspopup="dialog" aria-label="Open details: Fromagerie and cheese counter">
+        <div class="feed__pin__media">
+          <img
+            class="img--paris-fromagerie"
+            src="assets/paris-fromagerie.png"
+            alt="Interior of a traditional French fromagerie with marble shelves and a glass counter stacked with artisanal cheeses and handwritten French labels"
+            width="680"
+            height="1024"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="feed__pin__detail" hidden>
+          <div class="feed__pin__detail-body">
+            <p>
+              A narrow shop that smells like patience—wheels, wedges, blues and bloomy rinds lined up like a library you can eat. Let the monger win: we’ll point at textures we like, accept a sliver to taste, and walk out with something oozy for bread and something firm for later.
+            </p>
+            <p>
+              Pair it with a baguette and a bench; call it lunch that feels like a flex.
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="feed__pin feed__pin--interactive">
+      <div class="feed__pin__card" tabindex="0" aria-expanded="false" aria-haspopup="dialog" aria-label="Open details: Louvre and the pyramid">
+        <div class="feed__pin__media">
+          <img
+            class="img--paris-louvre"
+            src="https://images.unsplash.com/photo-1565099824688-e93eb20fe622?auto=format&amp;fit=crop&amp;w=900&amp;q=80"
+            alt="Louvre museum courtyard with glass pyramid"
+            width="600"
+            height="900"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="feed__pin__detail" hidden>
+          <div class="feed__pin__detail-body">
+            <p>
+              Glass and stone in one frame: the pyramid pulls you in, and the palace wings stretch out like they’ve always owned the square. Even a quick pass through the courtyards feels cinematic—then the real question is whether we brave a wing or just people-watch on the steps.
+            </p>
+            <p>
+              We’ll time it so we’re not sprinting the halls; art is better when your shoulders drop.
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="feed__pin feed__pin--interactive">
+      <div class="feed__pin__card" tabindex="0" aria-expanded="false" aria-haspopup="dialog" aria-label="Open details: Eiffel Tower from the gardens">
+        <div class="feed__pin__media">
+          <img
+            class="img--paris-eiffel"
+            src="https://images.unsplash.com/photo-1543349689-9a4d426bee8e?auto=format&amp;fit=crop&amp;w=900&amp;q=80"
+            alt="Eiffel Tower rising above trees and Paris skyline"
+            width="600"
+            height="900"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="feed__pin__detail" hidden>
+          <div class="feed__pin__detail-body">
+            <p>
+              Yes, it’s the postcard—and yes, it still hits when you turn a corner and it’s just *there*, latticework against the sky. Champ de Mars grass, picnic optional, smug grin mandatory. We don’t have to climb every level to feel like we did something right.
+            </p>
+            <p>
+              Blue-hour silhouette beats midday queue energy; we’ll aim for one golden moment and call it a win.
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="feed__pin feed__pin--interactive">
+      <div class="feed__pin__card" tabindex="0" aria-expanded="false" aria-haspopup="dialog" aria-label="Open details: Marais courtyards and passages">
+        <div class="feed__pin__media">
+          <img
+            class="img--paris-marais"
+            src="https://images.unsplash.com/photo-1522093007474-d86e45bf5978?auto=format&amp;fit=crop&amp;w=900&amp;q=80"
+            alt="Quiet Paris courtyard with plants and historic architecture"
+            width="600"
+            height="900"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="feed__pin__detail" hidden>
+          <div class="feed__pin__detail-body">
+            <p>
+              Le Marais hides pockets of calm behind heavy doors—courtyards, galleries, shops that feel like someone’s very chic living room. It’s our home base for wandering: vintage finds, falafel debates, and the occasional door left ajar that we absolutely peek through (politely).
+            </p>
+            <p>
+              No route map, just “turn when it looks interesting.”
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <section class="map-block" aria-label="Map of Le Marais, Paris">
+    <div class="map-block__frame">
+      <iframe
+        title="Le Marais, Paris on Google Maps"
+        src="https://www.google.com/maps?q=Le+Marais,+75004+Paris,+France&amp;z=14&amp;hl=en&amp;output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen
+      ></iframe>
+    </div>
+    <p class="map-block__note">
+      <a href="https://www.google.com/maps/search/?api=1&amp;query=Le+Marais+Paris+France" rel="noopener noreferrer" target="_blank">Open in Google Maps</a>
+    </p>
+  </section>
+
+  <footer class="foot">
+    <p>Le Marais</p>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
