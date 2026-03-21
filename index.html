@@ -2,6 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <script>
+    (function () {
+      var p = location.pathname;
+      if (p.endsWith("/") || /\.html?$/i.test(p)) return;
+      if (!p || p === "/") return;
+      location.replace(location.origin + p + "/" + location.search + location.hash);
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>For you</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -29,7 +37,7 @@
       <a
         href="city.html?city=amsterdam"
         class="landing-cta"
-        aria-label="Open your trip"
+        aria-label="Open our trip"
       >
         Open it
       </a>

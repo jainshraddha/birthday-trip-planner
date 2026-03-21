@@ -3,6 +3,19 @@
     return new URLSearchParams(location.search).get("city") === "paris" ? "paris" : "amsterdam";
   }
 
+  /** Directory URL for resolving js/… (handles /repo vs /repo/ and *.html). */
+  function tripAssetDirHref() {
+    var u = new URL(location.href);
+    var path = u.pathname;
+    if (path.endsWith("/")) return u.href;
+    if (/\.html?$/i.test(path)) {
+      u.pathname = path.replace(/[^/]+$/, "");
+      return u.href;
+    }
+    u.pathname = path + "/";
+    return u.href;
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     const cityKey = tripCityKey();
     if (!window.TripApp) return;
@@ -11,7 +24,7 @@
     if (!mainEl) return;
 
     const script = document.createElement("script");
-    script.src = new URL("js/feed-" + cityKey + ".js", location.href).href;
+    script.src = new URL("js/feed-" + cityKey + ".js", tripAssetDirHref()).href;
     script.onload = function () {
       const html = window.TRIP_FEED_HTML;
       delete window.TRIP_FEED_HTML;
