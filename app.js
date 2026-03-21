@@ -399,6 +399,7 @@
     if (Math.abs(dx) < SWIPE_MIN) return;
     if (Math.abs(dy) > SWIPE_VERTICAL_CAP && Math.abs(dy) > Math.abs(dx)) return;
     if (city === "amsterdam" && dx < 0) goParis();
+    else if (city === "amsterdam" && dx > 0) window.location.href = "index.html";
     else if (city === "paris" && dx > 0) goAmsterdam();
   }
 
@@ -435,6 +436,9 @@
     if (e.key === "ArrowRight" && city === "amsterdam") {
       e.preventDefault();
       goParis();
+    } else if (e.key === "ArrowLeft" && city === "amsterdam") {
+      e.preventDefault();
+      window.location.href = "index.html";
     } else if (e.key === "ArrowLeft" && city === "paris") {
       e.preventDefault();
       goAmsterdam();
