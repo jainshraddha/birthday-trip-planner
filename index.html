@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>For you — pick a city</title>
+  <title>For you</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -18,28 +18,22 @@
 
   <main class="landing">
     <header class="landing__header">
-      <p class="landing__eyebrow">Birthday trip</p>
+      <p class="landing__eyebrow">Birthday</p>
       <h1 class="landing__title">Hey you</h1>
       <p class="landing__lede">
-        I put this together so you could wander through two cities the way we might actually move through them—photos, little notes, reels when the mood hits. No pressure to “do it all”; it’s just a soft map of what could be fun.
-      </p>
-      <p class="landing__lede landing__lede--secondary">
-        Pick whichever city you’re curious about first. You can always come back for the other one.
+        I’ve been saving up the places and moments I keep imagining with you. It’s all in here when you want to look.
       </p>
     </header>
 
-    <nav class="landing__choices" aria-label="Choose a city to explore">
-      <a href="amsterdam.html" class="landing-card">
-        <span class="landing-card__label">Amsterdam</span>
-        <span class="landing-card__meta">De Pijp &amp; canals</span>
-        <span class="landing-card__hint">Open the mood board</span>
+    <div class="landing__cta-wrap">
+      <a
+        href="city.html?city=amsterdam"
+        class="landing-cta"
+        aria-label="Open your trip"
+      >
+        Open it
       </a>
-      <a href="paris.html" class="landing-card">
-        <span class="landing-card__label">Paris</span>
-        <span class="landing-card__meta">Le Marais &amp; beyond</span>
-        <span class="landing-card__hint">Open the mood board</span>
-      </a>
-    </nav>
+    </div>
   </main>
 
   <script src="app.js" defer></script>

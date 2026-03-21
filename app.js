@@ -18,9 +18,19 @@
       { passive: true }
     );
   }
+})();
 
-  const backdrop = document.getElementById("feed-backdrop");
+window.TripApp = window.TripApp || {};
+let feedPinsInitialized = false;
+
+window.TripApp.initFeedPins = function () {
+  if (feedPinsInitialized) return;
   const pins = document.querySelectorAll(".feed__pin--interactive");
+  if (!pins.length) return;
+  const backdrop = document.getElementById("feed-backdrop");
+  if (!backdrop) return;
+  feedPinsInitialized = true;
+
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const MODAL_EASE = "cubic-bezier(0.25, 0.9, 0.35, 1)";
   const OPEN_MS = 0.26;
@@ -373,7 +383,11 @@
   if (window.visualViewport) {
     window.visualViewport.addEventListener("resize", onViewportChange, { passive: true });
   }
-})();
+};
+
+if (document.querySelector(".feed__pin--interactive")) {
+  window.TripApp.initFeedPins();
+}
 
 (function citySlide() {
   const city = document.body.dataset.city;
@@ -387,11 +401,11 @@
   }
 
   function goAmsterdam() {
-    window.location.href = "amsterdam.html";
+    window.location.href = "city.html?city=amsterdam";
   }
 
   function goParis() {
-    window.location.href = "paris.html";
+    window.location.href = "city.html?city=paris";
   }
 
   function trySwipe(dx, dy) {
