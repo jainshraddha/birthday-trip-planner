@@ -18,12 +18,12 @@
 
   <div class="feed-backdrop" id="feed-backdrop" hidden></div>
 
-  <nav class="city-arrows" aria-label="Switch city">
-    <span class="city-arrows__hit city-arrows__hit--disabled" aria-current="page" title="Amsterdam">
+  <nav class="city-arrows" aria-label="Switch page">
+    <a href="index.html" class="city-arrows__hit" aria-label="Back to start">
       <svg class="city-arrows__icon" viewBox="0 0 24 24" aria-hidden="true">
         <polyline class="city-arrows__stroke" points="15 18 9 12 15 6" />
       </svg>
-    </span>
+    </a>
     <a href="paris.html" class="city-arrows__hit" aria-label="Go to Paris">
       <svg class="city-arrows__icon" viewBox="0 0 24 24" aria-hidden="true">
         <polyline class="city-arrows__stroke" points="9 18 15 12 9 6" />
@@ -33,7 +33,9 @@
 
   <header class="masthead">
     <nav class="city-nav" aria-label="Trip cities">
-      <a href="index.html" class="city-nav__link city-nav__link--current" aria-current="page">Amsterdam</a>
+      <a href="index.html" class="city-nav__link">Start</a>
+      <span class="city-nav__sep" aria-hidden="true">·</span>
+      <span class="city-nav__link city-nav__link--current" aria-current="page">Amsterdam</span>
       <span class="city-nav__sep" aria-hidden="true">·</span>
       <a href="paris.html" class="city-nav__link">Paris</a>
     </nav>

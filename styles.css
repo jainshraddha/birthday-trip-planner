@@ -353,6 +353,42 @@ body.page-paris .page-bg__tint {
   }
 }
 
+/* Paris row 1: two night aerials + Louvre (three across) */
+body.page-paris .feed__top-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--feed-gap);
+  width: 100%;
+}
+
+@media (min-width: 700px) {
+  body.page-paris .feed__top-row {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+}
+
+/* Paris row 2: reels only (full-width band, three across) */
+body.page-paris .feed__reels-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--feed-gap);
+  width: 100%;
+}
+
+@media (min-width: 700px) {
+  body.page-paris .feed__reels-row {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+}
+
 .feed__pin-slot {
   width: 100%;
   pointer-events: none;
@@ -360,6 +396,49 @@ body.page-paris .page-bg__tint {
 
 .feed__pin--interactive .feed__pin__card {
   cursor: pointer;
+}
+
+/* Reels: iframe keeps play taps; “Expand” opens the same lightbox as photo pins. */
+.feed__pin--video .feed__pin__card {
+  cursor: default;
+}
+
+.feed__pin--video .feed__pin__media--video {
+  cursor: pointer;
+}
+
+.feed__pin__video-expand {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 2;
+  margin: 0;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.feed__pin__video-expand:hover {
+  background: rgba(0, 0, 0, 0.72);
+}
+
+.feed__pin__video-expand:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.feed__pin__card.is-modal-expanded .feed__pin__video-expand {
+  display: none;
 }
 
 .feed__pin--interactive .feed__pin__card:focus-visible {
@@ -407,8 +486,7 @@ body.page-paris .page-bg__tint {
  */
 .feed__pin__card.is-modal-expanded .feed__pin__media,
 .feed__pin__card.is-modal-expanded .feed__pin__media--video {
-  flex: 1 1 0;
-  min-height: 0;
+  flex: 0 0 auto;
   width: 100%;
   max-height: none;
   aspect-ratio: unset;
@@ -499,44 +577,52 @@ body.page-paris .page-bg__tint {
   object-position: center 40%;
 }
 
-.feed__pin__media .img--paris-seine {
+.feed__pin__media .img--paris-abreuvoir {
+  object-position: center 46%;
+}
+
+.feed__pin__media .img--paris-metro-saint-michel {
+  object-position: center 42%;
+}
+
+.feed__pin__media .img--paris-arc-night {
   object-position: center 48%;
 }
 
-.feed__pin__media .img--paris-cafe-eiffel {
-  object-position: center 42%;
+.feed__pin__media .img--paris-eiffel-night-aerial {
+  object-position: center 45%;
 }
 
 .feed__pin__media .img--paris-louvre {
   object-position: center 42%;
 }
 
-.feed__pin__media .img--paris-montmartre {
-  object-position: center 40%;
-}
-
-.feed__pin__media .img--paris-haussmann {
+.feed__pin__media .img--paris-bouquiniste-notre-dame {
   object-position: center 45%;
-}
-
-.feed__pin__media .img--paris-river {
-  object-position: center 38%;
 }
 
 .feed__pin__media .img--paris-pastry {
   object-position: center 58%;
 }
 
-.feed__pin__media .img--paris-fromagerie {
-  object-position: center 46%;
+.feed__pin__media .img--paris-street-market {
+  object-position: center 80%;
 }
 
-.feed__pin__media .img--paris-eiffel {
-  object-position: center 35%;
+.feed__pin__media .img--paris-boulangerie {
+  object-position: center 58%;
 }
 
-.feed__pin__media .img--paris-marais {
+.feed__pin__media .img--paris-giverny {
   object-position: center 48%;
+}
+
+.feed__pin__media .img--paris-mona-lisa {
+  object-position: center 42%;
+}
+
+.feed__pin__media .img--paris-apollon {
+  object-position: center 38%;
 }
 
 .feed__pin__media--video {

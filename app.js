@@ -68,6 +68,11 @@
     clearFlyTimer();
     document.body.classList.remove("feed-modal-open");
     if (openCard) {
+      const media = openCard.querySelector(".feed__pin__media");
+      if (media) {
+        media.style.maxHeight = "";
+        media.style.height = "";
+      }
       openCard.classList.remove("is-modal", "is-modal-expanded");
       openCard.removeAttribute("role");
       openCard.removeAttribute("aria-modal");
@@ -88,43 +93,138 @@
     cleanupModalState();
   }
 
-  /**
-   * Largest axis-aligned rectangle with the same aspect ratio as the (visual) viewport
-   * that fits inside padded safe bounds — maximizes modal size on screen.
-   */
-  function modalViewportBox() {
+  /** Padded usable viewport rect (visualViewport when available). */
+  function modalViewportBounds() {
     const vv = window.visualViewport;
     const iw = vv ? vv.width : window.innerWidth;
     const ih = vv ? vv.height : window.innerHeight;
     const vx = vv ? vv.offsetLeft : 0;
     const vy = vv ? vv.offsetTop : 0;
-    const pad = Math.max(10, Math.min(24, Math.round(Math.min(iw, ih) * 0.04)));
+    const short = Math.min(iw, ih);
+    let padFrac = 0.04;
+    if (short >= 734 && short <= 1024) {
+      padFrac = 0.025;
+    }
+    const pad = Math.max(8, Math.min(24, Math.round(short * padFrac)));
     const maxW = Math.max(120, iw - pad * 2);
     const maxH = Math.max(160, ih - pad * 2);
-    const ar = iw / Math.max(1, ih);
-    let w;
-    let h;
-    if (maxW / maxH > ar) {
-      h = maxH;
-      w = h * ar;
-    } else {
-      w = maxW;
-      h = w / ar;
+    return { vx, vy, pad, maxW, maxH };
+  }
+
+  function getPinImageAspectRatio(card) {
+    const img = card.querySelector(".feed__pin__media img");
+    if (!img) return null;
+    if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+      return img.naturalWidth / img.naturalHeight;
     }
-    w = Math.floor(w);
-    h = Math.floor(h);
+    const w = parseFloat(img.getAttribute("width"));
+    const h = parseFloat(img.getAttribute("height"));
+    if (w > 0 && h > 0) return w / h;
+    return null;
+  }
+
+  /** Pinterest reel embeds use a vertical frame (see styles: 9 / 16). */
+  function getPinMediaAspectRatio(card) {
+    if (card.querySelector(".feed__pin__media--video")) {
+      return 9 / 16;
+    }
+    return getPinImageAspectRatio(card);
+  }
+
+  /**
+   * Modal box snug to the photo + caption: same outer aspect as content, not the browser window.
+   * Landscape photos get a wide-narrow card; portrait photos get a tall-narrow card.
+   */
+  function modalSnugImageBox(card) {
+    const { vx, vy, pad, maxW, maxH } = modalViewportBounds();
+    const imgAR = getPinMediaAspectRatio(card);
+    if (imgAR == null) {
+      const w = Math.floor(maxW);
+      const h = Math.floor(maxH);
+      return {
+        w,
+        h,
+        left: Math.round(vx + pad + (maxW - w) / 2),
+        top: Math.round(vy + pad + (maxH - h) / 2),
+        mediaImgH: null,
+      };
+    }
+
+    const cardPadX = 20;
+    const cardPadY = 20;
+    const innerMaxW = Math.max(80, maxW - cardPadX);
+    const innerMaxH = Math.max(120, maxH - cardPadY);
+
+    const detail = card.querySelector(".feed__pin__detail");
+    let detailH = 200;
+    if (detail && detail.offsetHeight > 0) {
+      detailH = Math.ceil(detail.offsetHeight);
+    }
+
+    const maxImgH = Math.max(60, innerMaxH - detailH);
+    const maxImgW = innerMaxW;
+
+    /** At least this wide inside padding so ultra-portrait pins don’t feel pencil-thin. */
+    const minInnerW = Math.min(innerMaxW, Math.max(300, Math.round(maxW * 0.4)));
+
+    function containImg(aw, ah) {
+      let iw;
+      let ih;
+      if (aw / ah > imgAR) {
+        ih = ah;
+        iw = ih * imgAR;
+      } else {
+        iw = aw;
+        ih = iw / imgAR;
+      }
+      return { imgW: iw, imgH: ih };
+    }
+
+    let { imgW, imgH } = containImg(maxImgW, maxImgH);
+    const innerW = Math.min(innerMaxW, Math.max(minInnerW, imgW));
+    ({ imgW, imgH } = containImg(innerW, maxImgH));
+
+    const w = Math.min(Math.ceil(innerW + cardPadX), maxW);
+    const h = Math.min(Math.ceil(imgH + detailH + cardPadY), maxH);
     const left = vx + pad + (maxW - w) / 2;
     const top = vy + pad + (maxH - h) / 2;
-    return { w, h, left: Math.round(left), top: Math.round(top) };
+    return {
+      w,
+      h,
+      left: Math.round(left),
+      top: Math.round(top),
+      mediaImgH: imgH,
+    };
   }
 
   function positionModalCentered(card) {
-    const { w, h, left, top } = modalViewportBox();
+    const box = modalSnugImageBox(card);
+    const { w, h, left, top } = box;
+    const media = card.querySelector(".feed__pin__media");
+    if (media) {
+      if (box.mediaImgH != null) {
+        const mh = `${Math.ceil(box.mediaImgH)}px`;
+        media.style.maxHeight = mh;
+        if (media.classList.contains("feed__pin__media--video")) {
+          media.style.height = mh;
+        } else {
+          media.style.height = "";
+        }
+      } else {
+        media.style.maxHeight = "";
+        media.style.height = "";
+      }
+    }
     card.style.width = `${w}px`;
     card.style.height = `${h}px`;
     card.style.maxHeight = `${h}px`;
     card.style.left = `${left}px`;
     card.style.top = `${top}px`;
+  }
+
+  function refineModalLayout(card, generation) {
+    if (generation !== modalGeneration || openCard !== card) return;
+    positionModalCentered(card);
   }
 
   function openFromCard(card) {
@@ -166,6 +266,20 @@
 
     positionModalCentered(card);
     void card.offsetWidth;
+    for (let i = 0; i < 5; i++) {
+      if (generation !== modalGeneration || openCard !== card) return;
+      const bw = card.offsetWidth;
+      const bh = card.offsetHeight;
+      refineModalLayout(card, generation);
+      void card.offsetWidth;
+      if (card.offsetWidth === bw && card.offsetHeight === bh) break;
+    }
+
+    const img = card.querySelector(".feed__pin__media img");
+    if (img && !img.complete) {
+      img.addEventListener("load", () => refineModalLayout(card, generation), { once: true });
+    }
+
     const last = card.getBoundingClientRect();
 
     const dx = first.left - last.left;
@@ -210,18 +324,39 @@
     const card = article.querySelector(".feed__pin__card");
     if (!card) return;
 
+    const isVideo = article.classList.contains("feed__pin--video");
+    if (isVideo) {
+      card.setAttribute("aria-expanded", "false");
+      card.setAttribute("aria-haspopup", "dialog");
+      const wrap = card.querySelector(".feed__pin__media--video");
+      if (wrap && !wrap.querySelector(".feed__pin__video-expand")) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "feed__pin__video-expand";
+        btn.setAttribute("aria-label", "Open reel in a larger view");
+        btn.textContent = "Expand";
+        wrap.appendChild(btn);
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (openCard === card) return;
+          openFromCard(card);
+        });
+      }
+    }
+
     card.addEventListener("click", (e) => {
       if (openCard === card) return;
+      if (isVideo) return;
       e.preventDefault();
       openFromCard(card);
     });
 
     card.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        if (openCard === card) return;
-        e.preventDefault();
-        openFromCard(card);
-      }
+      if (e.key !== "Enter" && e.key !== " ") return;
+      if (openCard === card) return;
+      e.preventDefault();
+      openFromCard(card);
     });
   });
 
@@ -252,7 +387,7 @@
   }
 
   function goAmsterdam() {
-    window.location.href = "index.html";
+    window.location.href = "amsterdam.html";
   }
 
   function goParis() {
