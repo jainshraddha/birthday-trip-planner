@@ -398,9 +398,8 @@
     if (modalOpen()) return;
     if (Math.abs(dx) < SWIPE_MIN) return;
     if (Math.abs(dy) > SWIPE_VERTICAL_CAP && Math.abs(dy) > Math.abs(dx)) return;
-    if (city === "amsterdam" && dx < 0) goParis();
-    else if (city === "amsterdam" && dx > 0) window.location.href = "index.html";
-    else if (city === "paris" && dx > 0) goAmsterdam();
+    if (city === "amsterdam") goParis();
+    else if (city === "paris") goAmsterdam();
   }
 
   let touchStartX = 0;
@@ -433,13 +432,10 @@
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     const t = e.target;
     if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT")) return;
-    if (e.key === "ArrowRight" && city === "amsterdam") {
+    if (city === "amsterdam" && (e.key === "ArrowRight" || e.key === "ArrowLeft")) {
       e.preventDefault();
       goParis();
-    } else if (e.key === "ArrowLeft" && city === "amsterdam") {
-      e.preventDefault();
-      window.location.href = "index.html";
-    } else if (e.key === "ArrowLeft" && city === "paris") {
+    } else if (city === "paris" && (e.key === "ArrowRight" || e.key === "ArrowLeft")) {
       e.preventDefault();
       goAmsterdam();
     }

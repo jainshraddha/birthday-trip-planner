@@ -101,7 +101,7 @@ body.feed-modal-open {
   pointer-events: auto;
 }
 
-/* Fixed chevrons: Amsterdam ← | → Paris (inactive side muted) */
+/* City carousel: both chevrons jump between Amsterdam ↔ Paris (Start stays in top nav) */
 .city-arrows {
   position: fixed;
   inset: 0;
