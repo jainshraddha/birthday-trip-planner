@@ -1,0 +1,430 @@
+:root {
+  --cork: #b8956c;
+  --cork-dark: #9a7b52;
+  --paper: #ffffff;
+  --ink: #111111;
+  --ink-soft: #5c5c5c;
+  --font-sans: "Figtree", system-ui, -apple-system, sans-serif;
+  --feed-gap: 12px;
+  --feed-radius: 16px;
+  --pin-aspect: 2 / 3;
+  --modal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--ink);
+  background: var(--cork-dark);
+  padding: max(12px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
+}
+
+body.feed-modal-open {
+  overflow: hidden;
+}
+
+.page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.page-bg__parallax {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 135vw;
+  height: 135vh;
+  min-width: 100%;
+  min-height: 100%;
+  margin-left: -67.5vw;
+  margin-top: -67.5vh;
+  background-image: url("assets/amsterdam-tulips-bg.png");
+  background-size: cover;
+  background-position: center 38%;
+  background-repeat: no-repeat;
+  filter: blur(2px);
+  opacity: 0.68;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.page-bg__tint {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    145deg,
+    rgba(184, 149, 108, 0.58) 0%,
+    rgba(154, 123, 82, 0.64) 50%,
+    rgba(92, 74, 48, 0.7) 100%
+  );
+}
+
+.noise {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  opacity: 0.06;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.feed-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  /* No backdrop-filter: keeps the modal (above this layer) sharp; dimming only */
+  background: rgba(35, 30, 22, 0.55);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  pointer-events: none;
+}
+
+.feed-backdrop.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.masthead {
+  position: relative;
+  z-index: 1;
+  max-width: 420px;
+  margin: 0 auto 20px;
+  padding: 8px 4px 4px;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.masthead__title {
+  margin: 0;
+  font-size: clamp(1.75rem, 6vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.masthead__kicker {
+  margin: 6px 0 0;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.92;
+}
+
+.map-block {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto 20px;
+  padding: 0 4px;
+}
+
+.map-block__frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  max-height: min(52vh, 420px);
+  border-radius: var(--feed-radius);
+  overflow: hidden;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.08),
+    0 6px 20px rgba(0, 0, 0, 0.12);
+  background: #e8e6e1;
+}
+
+.map-block__frame iframe {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.map-block__note {
+  margin: 8px 0 0;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.map-block__note a {
+  color: rgba(255, 255, 255, 0.95);
+  text-underline-offset: 2px;
+}
+
+.map-block__note a:hover {
+  color: #fff;
+}
+
+@media (min-width: 700px) {
+  .map-block {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 960px) {
+  .map-block {
+    max-width: 1000px;
+  }
+}
+
+/* No z-index here: a low z-index would trap position:fixed pins under .feed-backdrop (z-index 200). */
+.feed {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--feed-gap);
+}
+
+@media (min-width: 700px) {
+  .feed {
+    max-width: 720px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+}
+
+@media (min-width: 960px) {
+  .feed {
+    max-width: 1000px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.feed__pin-slot {
+  width: 100%;
+  pointer-events: none;
+}
+
+.feed__pin--interactive .feed__pin__card {
+  cursor: pointer;
+}
+
+.feed__pin--interactive .feed__pin__card:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.feed__pin__card {
+  position: relative;
+  background: var(--paper);
+  border-radius: var(--feed-radius);
+  overflow: hidden;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.06),
+    0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.feed__pin__card.is-modal {
+  z-index: 400;
+  isolation: isolate;
+  overflow: hidden;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.12),
+    0 24px 64px rgba(0, 0, 0, 0.22);
+}
+
+.feed__pin__card.is-modal.is-modal-expanded {
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Breathing room + safe area so images aren’t clipped by rounded corners or iPad inset */
+  padding:
+    max(10px, env(safe-area-inset-top, 0px))
+    max(10px, env(safe-area-inset-right, 0px))
+    max(10px, env(safe-area-inset-bottom, 0px))
+    max(10px, env(safe-area-inset-left, 0px));
+  box-sizing: border-box;
+}
+
+/*
+ * Flex-center + max dimensions avoids iPad/Safari clipping where width/height 100% + object-fit: contain
+ * on the img shaves a subpixel row off the top inside overflow: hidden parents.
+ */
+.feed__pin__card.is-modal-expanded .feed__pin__media,
+.feed__pin__card.is-modal-expanded .feed__pin__media--video {
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  max-height: none;
+  aspect-ratio: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.feed__pin__card.is-modal-expanded .feed__pin__media img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center center;
+}
+
+.feed__pin__card.is-modal-expanded .feed__pin__media--video iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.feed__pin__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--pin-aspect);
+  background: #e8e6e1;
+  overflow: hidden;
+}
+
+.feed__pin__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.feed__pin__media .img--houses {
+  object-position: center 42%;
+}
+
+.feed__pin__media .img--stroop {
+  object-position: center 45%;
+}
+
+.feed__pin__media .img--van-gogh {
+  object-position: center 22%;
+}
+
+.feed__pin__media .img--windmill {
+  object-position: center 40%;
+}
+
+.feed__pin__media .img--aerial {
+  object-position: center 38%;
+}
+
+.feed__pin__media .img--cafe-street {
+  object-position: center 45%;
+}
+
+.feed__pin__media .img--bulldog {
+  object-position: center 42%;
+}
+
+.feed__pin__media .img--patio {
+  object-position: center 40%;
+}
+
+.feed__pin__media .img--bakery-exterior {
+  object-position: center 35%;
+}
+
+.feed__pin__media .img--cuyp-basket {
+  object-position: center 42%;
+}
+
+.feed__pin__media .img--rijksmuseum {
+  object-position: center 42%;
+}
+
+.feed__pin__media .img--bakery {
+  object-position: center 40%;
+}
+
+.feed__pin__media--video {
+  aspect-ratio: 9 / 16;
+  background: #1a1a1a;
+}
+
+.feed__pin__media--video iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.feed__pin__detail {
+  position: relative;
+  padding: 14px 16px 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.feed__pin__detail[hidden] {
+  display: none !important;
+}
+
+.feed__pin__detail-body p {
+  margin: 0 0 12px;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.feed__pin__detail-body p:last-child {
+  margin-bottom: 0;
+}
+
+.feed__pin__detail-body a {
+  color: var(--cork-dark);
+  font-weight: 600;
+  text-underline-offset: 2px;
+}
+
+.feed__pin__detail-body a:hover {
+  color: var(--ink);
+}
+
+.foot {
+  position: relative;
+  z-index: 1;
+  max-width: 420px;
+  margin: 28px auto 0;
+  padding: 0 8px;
+  text-align: center;
+}
+
+.foot p {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feed-backdrop {
+    transition: none;
+  }
+}
