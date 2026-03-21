@@ -489,8 +489,13 @@ body.page-home .page-bg__tint {
   }
 }
 
-/* Paris row 1: two night aerials + Louvre (three across) */
-body.page-paris .feed__top-row {
+/*
+ * Full-width bands inside the main feed grid. Must span all columns — otherwise the
+ * parent grid places [top-row | reels-row | first loose pin] as three side-by-side
+ * cells (broken “striped” layout on wide screens).
+ */
+.feed > .feed__top-row,
+.feed > .feed__reels-row {
   display: flex;
   flex-direction: column;
   gap: var(--feed-gap);
@@ -498,25 +503,8 @@ body.page-paris .feed__top-row {
 }
 
 @media (min-width: 700px) {
-  body.page-paris .feed__top-row {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    align-items: start;
-  }
-}
-
-/* Paris row 2: reels only (full-width band, three across) */
-body.page-paris .feed__reels-row {
-  display: flex;
-  flex-direction: column;
-  gap: var(--feed-gap);
-  width: 100%;
-}
-
-@media (min-width: 700px) {
-  body.page-paris .feed__reels-row {
+  .feed > .feed__top-row,
+  .feed > .feed__reels-row {
     grid-column: 1 / -1;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
