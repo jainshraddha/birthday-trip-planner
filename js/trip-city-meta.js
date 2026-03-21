@@ -26,9 +26,11 @@ window.TRIP_CITY_META = {
     feedAriaLabel: "Ideas for Paris",
     mapAriaLabel: "Map of Le Marais, Paris",
     mapIframeTitle: "Le Marais, Paris on Google Maps",
+    /* Pin: center of Le Marais (~Place des Vosges); embed uses lat/lng so the map doesn’t drift to generic “Paris”. */
     mapEmbedSrc:
-      "https://www.google.com/maps?q=Le+Marais,+75004+Paris,+France&z=14&hl=en&output=embed",
-    mapLinkHref: "https://www.google.com/maps/search/?api=1&query=Le+Marais+Paris+France",
+      "https://www.google.com/maps?q=48.8556,2.3658&z=16&hl=en&output=embed",
+    mapLinkHref:
+      "https://www.google.com/maps/search/?api=1&query=Le+Marais%2C+75004+Paris%2C+France",
     footerText: "Le Marais",
   },
 };

@@ -815,6 +815,108 @@ body.page-home .page-bg__tint {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
+/* Background music (see js/trip-bg-music.js — add media/music.mp3) */
+.trip-music {
+  position: fixed;
+  z-index: 420;
+  right: max(10px, env(safe-area-inset-right, 0px));
+  bottom: max(10px, env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  max-width: calc(100vw - 20px);
+  pointer-events: none;
+}
+
+.trip-music__btn {
+  pointer-events: auto;
+  margin: 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow:
+    0 2px 14px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.trip-music__btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.55);
+  transform: scale(1.03);
+}
+
+.trip-music__btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.trip-music__btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+body.page-home .trip-music__btn {
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.trip-music__err {
+  margin: 0;
+  max-width: 220px;
+  padding: 8px 10px;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  font-weight: 500;
+  color: #fff;
+  text-align: right;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+/* Hidden off-screen so playback keeps working; iframe stays in DOM for YouTube */
+.trip-music__youtube-host--hidden {
+  position: fixed;
+  width: 200px;
+  height: 113px;
+  left: -4000px;
+  top: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+}
+
+.trip-music__audio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .feed-backdrop {
     transition: none;
