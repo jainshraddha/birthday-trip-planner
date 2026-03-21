@@ -8,7 +8,7 @@ window.TRIP_CITY_META = {
     title: "Amsterdam — De Pijp",
     h1: "Amsterdam",
     kicker: "De Pijp",
-    feedAriaLabel: "Amsterdam vibes",
+    feedAriaLabel: "Ideas for Amsterdam",
     mapAriaLabel: "Map of De Pijp, Amsterdam",
     mapIframeTitle: "De Pijp, Amsterdam on Google Maps",
     mapEmbedSrc:
@@ -23,7 +23,7 @@ window.TRIP_CITY_META = {
     title: "Paris — Le Marais",
     h1: "Paris",
     kicker: "Le Marais",
-    feedAriaLabel: "Paris vibes",
+    feedAriaLabel: "Ideas for Paris",
     mapAriaLabel: "Map of Le Marais, Paris",
     mapIframeTitle: "Le Marais, Paris on Google Maps",
     mapEmbedSrc:
