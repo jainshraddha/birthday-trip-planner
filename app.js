@@ -1,10 +1,13 @@
 (function () {
-  const parallax = document.querySelector(".page-bg__parallax");
-  if (parallax && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  const parallaxEls = document.querySelectorAll(".page-bg__parallax");
+  if (parallaxEls.length && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     let ticking = false;
     function applyParallax() {
       const y = window.scrollY * 0.2;
-      parallax.style.transform = `translate3d(0, ${y}px, 0)`;
+      const t = `translate3d(0, ${y}px, 0)`;
+      parallaxEls.forEach((el) => {
+        el.style.transform = t;
+      });
       ticking = false;
     }
     window.addEventListener(

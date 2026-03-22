@@ -5,6 +5,7 @@
   --ink: #111111;
   --ink-soft: #5c5c5c;
   --font-sans: "Figtree", system-ui, -apple-system, sans-serif;
+  --font-display: "Instrument Serif", Georgia, "Times New Roman", serif;
   --feed-gap: 12px;
   --feed-radius: 16px;
   --pin-aspect: 2 / 3;
@@ -310,19 +311,38 @@ body.page-london .page-bg__tint {
   );
 }
 
+/* Reset city defaults; two layers = photo atmosphere + faint map texture */
 body.page-home .page-bg__parallax {
-  background-image: url("assets/home-world-map-bg.png");
-  background-position: center center;
-  background-size: cover;
-  /* Match viewport (not 135vw) so cover crops less of the map */
+  background-image: none;
   width: 100vw;
   height: 100vh;
   min-width: 100%;
   min-height: 100%;
   margin-left: -50vw;
   margin-top: -50vh;
-  opacity: 0.7;
-  filter: blur(1.25px);
+  opacity: 1;
+  filter: none;
+}
+
+/* Golden-hour canal: reads as “journey,” not a cartoon map */
+body.page-home .page-bg__parallax--home-base {
+  background-image: url("assets/amsterdam-canal-golden.png");
+  background-position: center 42%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0.68;
+  filter: blur(2px) saturate(0.88) brightness(0.92);
+}
+
+/* Map only as a whisper; swap/remove this layer if you replace the PNG with a vintage chart */
+body.page-home .page-bg__parallax--home-map {
+  background-image: url("assets/home-world-map-bg.png");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0.2;
+  filter: grayscale(1) contrast(1.08) blur(1.75px);
+  mix-blend-mode: soft-light;
 }
 
 body.page-home .page-bg__tint {
@@ -333,6 +353,22 @@ body.page-home .page-bg__tint {
     rgba(155, 165, 178, 0.3) 46%,
     rgba(88, 80, 72, 0.38) 100%
   );
+}
+
+/* Soft vignette + faint spotlight so the first view feels “lit,” not flat */
+body.page-home .page-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 72% 58% at 50% 42%,
+      rgba(255, 252, 246, 0.14) 0%,
+      transparent 62%
+    ),
+    radial-gradient(ellipse 105% 95% at 50% 50%, transparent 40%, rgba(38, 32, 26, 0.22) 100%);
 }
 
 body.page-home {
@@ -355,6 +391,28 @@ body.page-home {
   flex-shrink: 0;
 }
 
+@keyframes landing-hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.988);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes landing-hero-line {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 body.page-home .landing__panel {
   position: relative;
   background: linear-gradient(168deg, rgba(255, 255, 255, 0.88) 0%, rgba(252, 248, 242, 0.84) 100%);
@@ -362,11 +420,43 @@ body.page-home .landing__panel {
   border: 1px solid rgba(255, 255, 255, 0.55);
   box-shadow:
     0 1px 3px rgba(42, 36, 28, 0.04),
-    0 10px 32px rgba(42, 36, 28, 0.07);
+    0 10px 32px rgba(42, 36, 28, 0.07),
+    0 0 0 1px rgba(255, 255, 255, 0.25) inset,
+    0 0 80px -20px rgba(255, 248, 232, 0.45);
   padding: clamp(1.5rem, 4.5vw, 2.25rem) clamp(1.25rem, 4vw, 2rem) clamp(1.35rem, 4vw, 1.85rem);
   overflow: hidden;
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
+  animation: landing-hero-in 1s var(--modal-ease) both;
+}
+
+body.page-home .landing__header > .landing__kicker {
+  animation: landing-hero-line 0.75s var(--modal-ease) 0.12s both;
+}
+
+body.page-home .landing__header > .landing__title {
+  animation: landing-hero-line 0.78s var(--modal-ease) 0.2s both;
+}
+
+body.page-home .landing__header > .landing__lede {
+  animation: landing-hero-line 0.72s var(--modal-ease) both;
+}
+
+/* Kicker is first <p>; ledes are 2nd–4th <p> in the header */
+body.page-home .landing__header > .landing__lede:nth-of-type(2) {
+  animation-delay: 0.3s;
+}
+
+body.page-home .landing__header > .landing__lede:nth-of-type(3) {
+  animation-delay: 0.38s;
+}
+
+body.page-home .landing__header > .landing__lede:nth-of-type(4) {
+  animation-delay: 0.46s;
+}
+
+body.page-home .landing__cta-wrap {
+  animation: landing-hero-line 0.72s var(--modal-ease) 0.54s both;
 }
 
 body.page-home .landing__panel::before {
@@ -402,6 +492,12 @@ body.page-home .landing__kicker {
 }
 
 body.page-home .landing__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: -0.015em;
+  line-height: 1.08;
+  font-size: clamp(2.35rem, 7.2vw, 3.15rem);
   color: var(--ink);
   margin-bottom: 1.125rem;
 }
@@ -1059,5 +1155,13 @@ body.page-home .landing-cta:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .feed-backdrop {
     transition: none;
+  }
+
+  body.page-home .landing__panel,
+  body.page-home .landing__header > .landing__kicker,
+  body.page-home .landing__header > .landing__title,
+  body.page-home .landing__header > .landing__lede,
+  body.page-home .landing__cta-wrap {
+    animation: none;
   }
 }
