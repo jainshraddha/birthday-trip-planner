@@ -1,6 +1,9 @@
 (function () {
   function tripCityKey() {
-    return new URLSearchParams(location.search).get("city") === "paris" ? "paris" : "amsterdam";
+    var q = new URLSearchParams(location.search).get("city");
+    if (q === "paris") return "paris";
+    if (q === "london") return "london";
+    return "amsterdam";
   }
 
   /** Directory URL for resolving js/… (handles /repo vs /repo/ and *.html). */
@@ -38,7 +41,7 @@
     };
     script.onerror = function () {
       mainEl.innerHTML =
-        '<p class="trip-feed-error" role="alert">Couldn’t find the board script for this city. If you’re developing, run <code>python3 scripts/embed-feeds.py</code> after editing <code>feed/*.html</code>.</p>';
+        '<p class="trip-feed-error" role="alert">Couldn’t find the board script for this city. If you’re developing, run <code>python3 scripts/embed-feeds.py</code> after editing <code>feed/amsterdam.html</code>, <code>feed/paris.html</code>, or <code>feed/london.html</code>.</p>';
     };
     document.head.appendChild(script);
   });

@@ -14,6 +14,7 @@
 
   var TRIP_MUSIC_SRC = {
     home: "media/music.mp3",
+    london: "media/music.mp3",
   };
 
   var DEFAULT_AUDIO_VOL = 0.32;
@@ -23,6 +24,7 @@
     if (document.body.classList.contains("page-home")) return "home";
     var c = document.body.dataset.city;
     if (c === "paris") return "paris";
+    if (c === "london") return "london";
     return "amsterdam";
   }
 
@@ -205,10 +207,18 @@
         videoId: videoId,
         width: "200",
         height: "113",
+        /* Error 153 fix: privacy-enhanced embed (see youtube-nocookie + referrer meta). */
+        host: "https://www.youtube-nocookie.com",
         playerVars: playerVars,
         events: {
           onReady: function (ev) {
             var p = ev.target;
+            try {
+              var iframe = p.getIframe && p.getIframe();
+              if (iframe) {
+                iframe.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+              }
+            } catch (e1) {}
             p.setVolume(DEFAULT_YT_VOL);
             p.mute();
             p.playVideo();
@@ -232,7 +242,7 @@
               ev.data === 150 || ev.data === 101
                 ? " This video can’t be embedded; try a different link."
                 : ev.data === 153
-                  ? " Player config error — try refreshing, or open the video on YouTube."
+                  ? " Referrer/embed issue — try a hard refresh, allow this site in ad blockers, or open the video on YouTube."
                   : "";
             ui.err.textContent =
               "Couldn’t load the YouTube player." + hint + " Check your connection or try again later.";

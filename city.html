@@ -11,6 +11,7 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
   <title>Trip</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -31,9 +32,9 @@
     <div class="city-arrows__side">
       <a
         data-trip-visible="amsterdam"
-        href="city.html?city=paris"
+        href="city.html?city=london"
         class="city-arrows__hit"
-        aria-label="Paris (previous in carousel)"
+        aria-label="London (previous city)"
         hidden
       >
         <svg class="city-arrows__icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -44,7 +45,18 @@
         data-trip-visible="paris"
         href="city.html?city=amsterdam"
         class="city-arrows__hit"
-        aria-label="Amsterdam (previous in carousel)"
+        aria-label="Amsterdam (previous city)"
+        hidden
+      >
+        <svg class="city-arrows__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <polyline class="city-arrows__stroke" points="15 18 9 12 15 6" />
+        </svg>
+      </a>
+      <a
+        data-trip-visible="london"
+        href="city.html?city=paris"
+        class="city-arrows__hit"
+        aria-label="Paris (previous city)"
         hidden
       >
         <svg class="city-arrows__icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -57,7 +69,7 @@
         data-trip-visible="amsterdam"
         href="city.html?city=paris"
         class="city-arrows__hit"
-        aria-label="Paris (next in carousel)"
+        aria-label="Paris (next city)"
         hidden
       >
         <svg class="city-arrows__icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -66,9 +78,20 @@
       </a>
       <a
         data-trip-visible="paris"
+        href="city.html?city=london"
+        class="city-arrows__hit"
+        aria-label="London (next city)"
+        hidden
+      >
+        <svg class="city-arrows__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <polyline class="city-arrows__stroke" points="9 18 15 12 9 6" />
+        </svg>
+      </a>
+      <a
+        data-trip-visible="london"
         href="city.html?city=amsterdam"
         class="city-arrows__hit"
-        aria-label="Amsterdam (next in carousel)"
+        aria-label="Amsterdam (next city)"
         hidden
       >
         <svg class="city-arrows__icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -90,6 +113,7 @@
         >Amsterdam</span
       >
       <a data-trip-visible="paris" href="city.html?city=amsterdam" class="city-nav__link" hidden>Amsterdam</a>
+      <a data-trip-visible="london" href="city.html?city=amsterdam" class="city-nav__link" hidden>Amsterdam</a>
       <span class="city-nav__sep" aria-hidden="true">·</span>
       <a data-trip-visible="amsterdam" href="city.html?city=paris" class="city-nav__link" hidden>Paris</a>
       <span
@@ -98,6 +122,17 @@
         aria-current="page"
         hidden
         >Paris</span
+      >
+      <a data-trip-visible="london" href="city.html?city=paris" class="city-nav__link" hidden>Paris</a>
+      <span class="city-nav__sep" aria-hidden="true">·</span>
+      <a data-trip-visible="amsterdam" href="city.html?city=london" class="city-nav__link" hidden>London</a>
+      <a data-trip-visible="paris" href="city.html?city=london" class="city-nav__link" hidden>London</a>
+      <span
+        data-trip-visible="london"
+        class="city-nav__link city-nav__link--current"
+        aria-current="page"
+        hidden
+        >London</span
       >
     </nav>
     <h1 class="masthead__title" id="trip-masthead-h1">Amsterdam</h1>
@@ -128,7 +163,10 @@
 
   <script>
     (function () {
-      var k = new URLSearchParams(location.search).get("city") === "paris" ? "paris" : "amsterdam";
+      var q = new URLSearchParams(location.search).get("city");
+      var k = "amsterdam";
+      if (q === "paris") k = "paris";
+      else if (q === "london") k = "london";
       var m = window.TRIP_CITY_META[k];
       document.body.className = m.bodyClass;
       document.body.dataset.city = m.dataCity;

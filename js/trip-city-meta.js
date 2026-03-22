@@ -1,5 +1,5 @@
 /**
- * Shared config for city.html — feed markup lives in /feed/{amsterdam|paris}.html
+ * Shared config for city.html — feed markup lives in /feed/{amsterdam|paris|london}.html
  */
 window.TRIP_CITY_META = {
   amsterdam: {
@@ -26,11 +26,26 @@ window.TRIP_CITY_META = {
     feedAriaLabel: "Ideas for Paris",
     mapAriaLabel: "Map of Le Marais, Paris",
     mapIframeTitle: "Le Marais, Paris on Google Maps",
-    /* Pin: center of Le Marais (~Place des Vosges); embed uses lat/lng so the map doesn’t drift to generic “Paris”. */
+    /* Same pattern as Amsterdam (De Pijp): named neighborhood in q= so the embed pins the quarter, not generic city centre. */
     mapEmbedSrc:
-      "https://www.google.com/maps?q=48.8556,2.3658&z=16&hl=en&output=embed",
+      "https://www.google.com/maps?q=Le+Marais,+Paris,+France&z=15&hl=en&output=embed",
     mapLinkHref:
-      "https://www.google.com/maps/search/?api=1&query=Le+Marais%2C+75004+Paris%2C+France",
+      "https://www.google.com/maps/search/?api=1&query=Le+Marais+Paris+France",
     footerText: "Le Marais",
+  },
+  london: {
+    bodyClass: "page-london",
+    dataCity: "london",
+    title: "London — Covent Garden",
+    h1: "London",
+    kicker: "Covent Garden",
+    feedAriaLabel: "Ideas for London",
+    mapAriaLabel: "Map of Covent Garden, London",
+    mapIframeTitle: "Covent Garden, London on Google Maps",
+    mapEmbedSrc:
+      "https://www.google.com/maps?q=Covent+Garden,+London,+United+Kingdom&z=15&hl=en&output=embed",
+    mapLinkHref:
+      "https://www.google.com/maps/search/?api=1&query=Covent+Garden+London+United+Kingdom",
+    footerText: "Covent Garden",
   },
 };

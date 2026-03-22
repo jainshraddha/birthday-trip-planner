@@ -101,7 +101,7 @@ body.feed-modal-open {
   pointer-events: auto;
 }
 
-/* City carousel: both chevrons jump between Amsterdam ↔ Paris (Start stays in top nav) */
+/* City carousel: chevrons cycle Amsterdam → Paris → London (Start stays in top nav) */
 .city-arrows {
   position: fixed;
   inset: 0;
@@ -228,7 +228,7 @@ body.feed-modal-open .city-arrows {
 .masthead {
   position: relative;
   z-index: 1;
-  max-width: 420px;
+  max-width: 500px;
   margin: 0 auto 20px;
   padding: 8px 4px 4px;
   text-align: center;
@@ -293,6 +293,20 @@ body.page-paris .page-bg__tint {
     rgba(100, 118, 138, 0.52) 0%,
     rgba(72, 88, 108, 0.58) 45%,
     rgba(42, 48, 62, 0.72) 100%
+  );
+}
+
+body.page-london .page-bg__parallax {
+  background-image: url("https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1920&q=80");
+  background-position: center 40%;
+}
+
+body.page-london .page-bg__tint {
+  background: linear-gradient(
+    145deg,
+    rgba(88, 92, 108, 0.5) 0%,
+    rgba(52, 56, 72, 0.58) 50%,
+    rgba(28, 30, 42, 0.72) 100%
   );
 }
 
@@ -899,10 +913,10 @@ body.page-home .trip-music__btn {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  opacity: 0;
+  opacity: 0.02;
   pointer-events: none;
   border: 0;
-  clip: rect(0, 0, 0, 0);
+  /* Avoid clip:0 — some players treat fully clipped iframes as invalid (Error 153). */
 }
 
 .trip-music__audio {
