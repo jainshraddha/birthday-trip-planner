@@ -16,11 +16,23 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Figtree:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
   <link rel="stylesheet" href="styles.css" />
   <script src="js/trip-city-meta.js"></script>
 </head>
 <body>
+  <script>
+    (function () {
+      var q = new URLSearchParams(location.search).get("city");
+      var k = q === "paris" ? "paris" : q === "london" ? "london" : "amsterdam";
+      var bc = k === "paris" ? "page-paris" : k === "london" ? "page-london" : "page-amsterdam";
+      document.body.className = "page-city " + bc;
+      document.body.dataset.city = k;
+    })();
+  </script>
   <div class="page-bg" aria-hidden="true">
     <div class="page-bg__parallax"></div>
     <div class="page-bg__tint"></div>
@@ -102,65 +114,101 @@
     </div>
   </nav>
 
-  <header class="masthead">
-    <nav class="city-nav" aria-label="Trip cities">
-      <a href="index.html" class="city-nav__link">Start</a>
-      <span class="city-nav__sep" aria-hidden="true">·</span>
-      <span
-        data-trip-visible="amsterdam"
-        class="city-nav__link city-nav__link--current"
-        aria-current="page"
-        hidden
-        >Amsterdam</span
-      >
-      <a data-trip-visible="paris" href="city.html?city=amsterdam" class="city-nav__link" hidden>Amsterdam</a>
-      <a data-trip-visible="london" href="city.html?city=amsterdam" class="city-nav__link" hidden>Amsterdam</a>
-      <span class="city-nav__sep" aria-hidden="true">·</span>
-      <a data-trip-visible="amsterdam" href="city.html?city=paris" class="city-nav__link" hidden>Paris</a>
-      <span
-        data-trip-visible="paris"
-        class="city-nav__link city-nav__link--current"
-        aria-current="page"
-        hidden
-        >Paris</span
-      >
-      <a data-trip-visible="london" href="city.html?city=paris" class="city-nav__link" hidden>Paris</a>
-      <span class="city-nav__sep" aria-hidden="true">·</span>
-      <a data-trip-visible="amsterdam" href="city.html?city=london" class="city-nav__link" hidden>London</a>
-      <a data-trip-visible="paris" href="city.html?city=london" class="city-nav__link" hidden>London</a>
-      <span
-        data-trip-visible="london"
-        class="city-nav__link city-nav__link--current"
-        aria-current="page"
-        hidden
-        >London</span
-      >
-    </nav>
-    <h1 class="masthead__title" id="trip-masthead-h1">Amsterdam</h1>
-    <p class="masthead__kicker" id="trip-masthead-kicker">De Pijp</p>
+  <header class="city-hero">
+    <div class="city-hero__bg" aria-hidden="true"></div>
+    <div class="city-hero__scrim" aria-hidden="true"></div>
+    <div class="city-hero__top">
+      <nav class="city-nav city-hero__nav" aria-label="Trip cities">
+        <a href="index.html" class="city-nav__link">Start</a>
+        <span class="city-nav__sep" aria-hidden="true">·</span>
+        <span
+          data-trip-visible="amsterdam"
+          class="city-nav__link city-nav__link--current"
+          aria-current="page"
+          hidden
+          >Amsterdam</span
+        >
+        <a data-trip-visible="paris" href="city.html?city=amsterdam" class="city-nav__link" hidden>Amsterdam</a>
+        <a data-trip-visible="london" href="city.html?city=amsterdam" class="city-nav__link" hidden>Amsterdam</a>
+        <span class="city-nav__sep" aria-hidden="true">·</span>
+        <a data-trip-visible="amsterdam" href="city.html?city=paris" class="city-nav__link" hidden>Paris</a>
+        <span
+          data-trip-visible="paris"
+          class="city-nav__link city-nav__link--current"
+          aria-current="page"
+          hidden
+          >Paris</span
+        >
+        <a data-trip-visible="london" href="city.html?city=paris" class="city-nav__link" hidden>Paris</a>
+        <span class="city-nav__sep" aria-hidden="true">·</span>
+        <a data-trip-visible="amsterdam" href="city.html?city=london" class="city-nav__link" hidden>London</a>
+        <a data-trip-visible="paris" href="city.html?city=london" class="city-nav__link" hidden>London</a>
+        <span
+          data-trip-visible="london"
+          class="city-nav__link city-nav__link--current"
+          aria-current="page"
+          hidden
+          >London</span
+        >
+      </nav>
+    </div>
+    <div class="city-hero__center">
+      <p class="city-hero__eyebrow" id="trip-hero-eyebrow">Your birthday trip</p>
+      <h1 class="city-hero__title" id="trip-masthead-h1">Amsterdam</h1>
+      <p class="city-hero__kicker" id="trip-masthead-kicker">De Pijp</p>
+      <p class="city-hero__lede" id="trip-hero-lede"></p>
+      <a href="#trip-feed" class="city-hero__cta">Explore the board</a>
+    </div>
   </header>
 
-  <main class="feed" id="trip-feed" aria-label="Trip vibes"></main>
+  <div class="city-board">
+    <section class="city-board__intro" aria-labelledby="trip-board-title">
+      <h2 class="city-board__intro-title" id="trip-board-title">Ideas we loved</h2>
+      <p class="city-board__intro-lede" id="trip-board-lede"></p>
+    </section>
 
-  <section class="map-block" id="trip-map-block" aria-label="Map">
-    <div class="map-block__frame">
-      <iframe
-        id="trip-map-iframe"
-        title="Map"
-        src="about:blank"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        allowfullscreen
-      ></iframe>
-    </div>
-    <p class="map-block__note">
-      <a id="trip-map-link" href="#" rel="noopener noreferrer" target="_blank">Open in Google Maps</a>
-    </p>
-  </section>
+    <section class="city-split" aria-labelledby="trip-split-h2">
+      <div class="city-split__media">
+        <img
+          id="trip-split-img"
+          class="city-split__img"
+          src="assets/amsterdam-stroopwafels-van-wonderen.png"
+          alt=""
+          width="800"
+          height="1000"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <div class="city-split__copy">
+        <h2 class="city-split__title" id="trip-split-h2">A neighborhood to wander</h2>
+        <p class="city-split__text" id="trip-split-p"></p>
+        <a href="#trip-map-block" class="city-split__cta">On the map</a>
+      </div>
+    </section>
 
-  <footer class="foot">
-    <p id="trip-footer-text">De Pijp</p>
-  </footer>
+    <main class="feed" id="trip-feed" aria-label="Trip vibes"></main>
+
+    <section class="map-block" id="trip-map-block" aria-label="Map">
+      <div class="map-block__frame">
+        <iframe
+          id="trip-map-iframe"
+          title="Map"
+          src="about:blank"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <p class="map-block__note">
+        <a id="trip-map-link" href="#" rel="noopener noreferrer" target="_blank">Open in Google Maps</a>
+      </p>
+    </section>
+
+    <footer class="foot foot--city">
+      <p id="trip-footer-text">De Pijp</p>
+    </footer>
+  </div>
 
   <script src="js/trip-city-apply.js"></script>
   <script src="js/trip-city-page-init.js" defer></script>

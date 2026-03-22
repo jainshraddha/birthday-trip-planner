@@ -1,4 +1,5 @@
 (function () {
+  if (document.body.classList.contains("page-city")) return;
   const parallaxEls = document.querySelectorAll(".page-bg__parallax");
   if (parallaxEls.length && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     let ticking = false;
@@ -504,9 +505,12 @@ if (document.querySelector(".feed__pin--interactive")) {
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     const a = e.target.closest("a[href]");
     if (!a) return;
+    const rawHref = a.getAttribute("href");
+    /* Same-page anchors (e.g. #trip-feed) must not be hijacked — URL still parses as city.html + ?city= */
+    if (rawHref != null && rawHref.charAt(0) === "#") return;
     let url;
     try {
-      url = new URL(a.getAttribute("href"), location.href);
+      url = new URL(rawHref, location.href);
     } catch (err) {
       return;
     }
