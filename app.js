@@ -677,15 +677,23 @@ if (document.querySelector(".feed__pin--interactive")) {
     else goPrev();
   }
 
-  let touchStartX = 0;
-  let touchStartY = 0;
+  /** NaN = no swipe gesture in progress (must not use 0 — link taps skipped touchstart would fake huge dx/dy). */
+  let touchStartX = NaN;
+  let touchStartY = NaN;
+
+  const SWIPE_IGNORE_ROOT =
+    "iframe, a, button, input, textarea, select, label, [role='button'], summary";
 
   document.addEventListener(
     "touchstart",
     (e) => {
       if (e.touches.length !== 1) return;
       const el = e.target;
-      if (el.closest && el.closest("iframe, a, button, input, textarea, select, label")) return;
+      if (el.closest && el.closest(SWIPE_IGNORE_ROOT)) {
+        touchStartX = NaN;
+        touchStartY = NaN;
+        return;
+      }
       touchStartX = e.touches[0].clientX;
       touchStartY = e.touches[0].clientY;
     },
@@ -696,8 +704,26 @@ if (document.querySelector(".feed__pin--interactive")) {
     "touchend",
     (e) => {
       if (e.changedTouches.length !== 1) return;
+      const el = e.target;
+      if (el.closest && el.closest(SWIPE_IGNORE_ROOT)) {
+        touchStartX = NaN;
+        touchStartY = NaN;
+        return;
+      }
+      if (!Number.isFinite(touchStartX) || !Number.isFinite(touchStartY)) return;
       const t = e.changedTouches[0];
       trySwipe(t.clientX - touchStartX, t.clientY - touchStartY);
+      touchStartX = NaN;
+      touchStartY = NaN;
+    },
+    { passive: true }
+  );
+
+  document.addEventListener(
+    "touchcancel",
+    () => {
+      touchStartX = NaN;
+      touchStartY = NaN;
     },
     { passive: true }
   );
