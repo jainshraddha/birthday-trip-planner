@@ -1,5 +1,5 @@
 /**
- * Background music: MP3 on home, YouTube (hidden iframe) on city pages.
+ * Background music: MP3 on home only; Amsterdam, Paris, and London use YouTube (hidden iframe).
  * YouTube autoplays muted (browser policy); first “Sound on” unlocks audio for the tab (sessionStorage).
  */
 (function () {
@@ -13,11 +13,11 @@
   var TRIP_YOUTUBE_IDS = {
     amsterdam: { id: "bvUTvG0LgaU", volume: 20 },
     paris: { id: "9n-hyA2-FDg", volume: 32 },
+    london: { id: "8UjJBh_GO2k", volume: 32 },
   };
 
   var TRIP_MUSIC_SRC = {
     home: "media/music.mp3",
-    london: "media/music.mp3",
   };
 
   var DEFAULT_AUDIO_VOL = 0.32;
