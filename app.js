@@ -448,6 +448,54 @@ window.TripApp.initFeedPins = function () {
     window.TripApp.closeFeedModalIfOpen = function () {
       closeModal();
     };
+
+    window.TripApp.openFeedModalFromCard = function (cardEl) {
+      if (cardEl) openFromCard(cardEl);
+    };
+
+    window.TripApp.syncCitySplitTwinAccess = function () {
+      const wrap = document.querySelector(".city-split__media");
+      if (!wrap) return;
+      const twin = document.getElementById("trip-feed-split-twin");
+      const card = twin && twin.querySelector(".feed__pin__card");
+      if (!twin || !card) {
+        wrap.removeAttribute("role");
+        wrap.removeAttribute("tabindex");
+        wrap.removeAttribute("aria-label");
+        return;
+      }
+      const label = card.getAttribute("aria-label");
+      wrap.setAttribute("role", "button");
+      wrap.setAttribute("tabindex", "0");
+      wrap.setAttribute("aria-label", label || "View photo and details");
+    };
+
+    function onCitySplitMediaActivate(e) {
+      if (!document.body.classList.contains("page-city")) return;
+      const wrap = e.target.closest(".city-split__media");
+      if (!wrap) return;
+      if (e.target.closest("a, button")) return;
+      const twin = document.getElementById("trip-feed-split-twin");
+      const card = twin && twin.querySelector(".feed__pin__card");
+      if (!card) return;
+      e.preventDefault();
+      openFromCard(card);
+    }
+
+    function onCitySplitMediaKeydown(e) {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      if (!document.body.classList.contains("page-city")) return;
+      const t = e.target;
+      if (!t || !t.classList || !t.classList.contains("city-split__media")) return;
+      const twin = document.getElementById("trip-feed-split-twin");
+      const card = twin && twin.querySelector(".feed__pin__card");
+      if (!card) return;
+      e.preventDefault();
+      openFromCard(card);
+    }
+
+    document.addEventListener("click", onCitySplitMediaActivate);
+    document.addEventListener("keydown", onCitySplitMediaKeydown);
   }
 
   pins.forEach((article) => {
@@ -466,6 +514,10 @@ window.TripApp.initFeedPins = function () {
       wrap.appendChild(btn);
     }
   });
+
+  if (window.TripApp.syncCitySplitTwinAccess) {
+    window.TripApp.syncCitySplitTwinAccess();
+  }
 };
 
 if (document.querySelector(".feed__pin--interactive")) {
