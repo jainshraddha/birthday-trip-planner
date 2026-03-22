@@ -313,17 +313,35 @@ body.page-london .page-bg__tint {
 body.page-home .page-bg__parallax {
   background-image: url("assets/home-world-map-bg.png");
   background-position: center center;
-  opacity: 0.62;
-  filter: blur(1.5px);
+  background-size: cover;
+  /* Match viewport (not 135vw) so cover crops less of the map */
+  width: 100vw;
+  height: 100vh;
+  min-width: 100%;
+  min-height: 100%;
+  margin-left: -50vw;
+  margin-top: -50vh;
+  opacity: 0.7;
+  filter: blur(1.25px);
 }
 
 body.page-home .page-bg__tint {
+  /* Lighter wash: less punch vs the paper card, map stays readable */
   background: linear-gradient(
-    155deg,
-    rgba(120, 132, 148, 0.38) 0%,
-    rgba(78, 86, 98, 0.48) 42%,
-    rgba(38, 42, 52, 0.62) 100%
+    165deg,
+    rgba(210, 198, 180, 0.26) 0%,
+    rgba(155, 165, 178, 0.3) 46%,
+    rgba(88, 80, 72, 0.38) 100%
   );
+}
+
+body.page-home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .landing {
@@ -332,7 +350,34 @@ body.page-home .page-bg__tint {
   width: 100%;
   max-width: 520px;
   margin: 0 auto;
-  padding: clamp(24px, 6vw, 48px) 16px 40px;
+  padding: clamp(16px, 4vw, 28px) max(16px, env(safe-area-inset-left)) clamp(20px, 5vh, 36px)
+    max(16px, env(safe-area-inset-right));
+  flex-shrink: 0;
+}
+
+body.page-home .landing__panel {
+  position: relative;
+  background: linear-gradient(168deg, rgba(255, 255, 255, 0.88) 0%, rgba(252, 248, 242, 0.84) 100%);
+  border-radius: var(--feed-radius);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    0 1px 3px rgba(42, 36, 28, 0.04),
+    0 10px 32px rgba(42, 36, 28, 0.07);
+  padding: clamp(1.5rem, 4.5vw, 2.25rem) clamp(1.25rem, 4vw, 2rem) clamp(1.35rem, 4vw, 1.85rem);
+  overflow: hidden;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+body.page-home .landing__panel::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--cork-dark), var(--cork), #c4a574);
+  opacity: 0.75;
 }
 
 .landing__header {
@@ -342,9 +387,39 @@ body.page-home .page-bg__tint {
 }
 
 body.page-home .landing__header {
-  text-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.35),
-    0 2px 28px rgba(0, 0, 0, 0.4);
+  color: var(--ink);
+  text-shadow: none;
+}
+
+body.page-home .landing__kicker {
+  margin: 0 0 10px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cork-dark);
+  opacity: 0.88;
+}
+
+body.page-home .landing__title {
+  color: var(--ink);
+  margin-bottom: 1.125rem;
+}
+
+body.page-home .landing__lede {
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+body.page-home .landing__lede--secondary {
+  margin-top: 0.25rem;
+  margin-bottom: 0;
+  padding-top: 1.125rem;
+  border-top: 1px solid rgba(184, 149, 108, 0.38);
+  color: var(--ink-soft);
+  font-style: italic;
+  font-weight: 500;
+  opacity: 1;
 }
 
 .landing__eyebrow {
@@ -386,6 +461,10 @@ body.page-home .landing__header {
   margin-top: 8px;
 }
 
+body.page-home .landing__cta-wrap {
+  margin-top: 1.35rem;
+}
+
 .landing-cta {
   display: inline-flex;
   align-items: center;
@@ -420,6 +499,27 @@ body.page-home .landing__header {
 
 .landing-cta:focus-visible {
   outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+body.page-home .landing-cta {
+  color: #fff;
+  background: linear-gradient(165deg, var(--cork) 0%, var(--cork-dark) 100%);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.08),
+    0 8px 24px rgba(92, 74, 48, 0.28);
+}
+
+body.page-home .landing-cta:hover {
+  border-color: rgba(0, 0, 0, 0.14);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    0 14px 36px rgba(74, 58, 40, 0.32);
+}
+
+body.page-home .landing-cta:focus-visible {
+  outline: 2px solid var(--cork-dark);
   outline-offset: 3px;
 }
 
@@ -911,11 +1011,6 @@ body.page-home .landing__header {
 .trip-music__btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
-}
-
-body.page-home .trip-music__btn {
-  color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .trip-music__err {

@@ -307,6 +307,8 @@
     var src = TRIP_MUSIC_SRC[key];
     if (!src) return;
 
+    var hideControls = key === "home";
+
     var audio = document.createElement("audio");
     audio.className = "trip-music__audio";
     audio.setAttribute("aria-hidden", "true");
@@ -318,45 +320,46 @@
     audio.src = src;
     document.body.appendChild(audio);
 
-    var ui = createUiShell();
-    ui.err.textContent =
-      "Couldn’t load music — add an MP3 at media/music.mp3 (see TRIP_MUSIC_SRC in trip-bg-music.js).";
+    var ui = null;
+    if (!hideControls) {
+      ui = createUiShell();
+      ui.err.textContent =
+        "Couldn’t load music — add an MP3 at media/music.mp3 (see TRIP_MUSIC_SRC in trip-bg-music.js).";
 
-    ui.btn.addEventListener("click", function () {
-      if (audio.error) return;
-      if (!audio.paused && audio.muted) {
-        audio.muted = false;
-        setSoundUnlocked();
-        setWantsMusicOn(true);
-        syncAudioButton(audio, ui);
-        return;
-      }
-      if (!audio.paused) {
-        audio.pause();
-        setWantsMusicOn(false);
-        syncAudioButton(audio, ui);
-        return;
-      }
-      audio.play().then(function () {
-        setWantsMusicOn(true);
-        if (soundUnlocked()) {
+      ui.btn.addEventListener("click", function () {
+        if (audio.error) return;
+        if (!audio.paused && audio.muted) {
           audio.muted = false;
-        } else {
-          audio.muted = true;
+          setSoundUnlocked();
+          setWantsMusicOn(true);
+          syncAudioButton(audio, ui);
+          return;
         }
-        syncAudioButton(audio, ui);
-      }).catch(function () {
-        syncAudioButton(audio, ui);
+        if (!audio.paused) {
+          audio.pause();
+          setWantsMusicOn(false);
+          syncAudioButton(audio, ui);
+          return;
+        }
+        audio.play().then(function () {
+          setWantsMusicOn(true);
+          if (soundUnlocked()) {
+            audio.muted = false;
+          } else {
+            audio.muted = true;
+          }
+          syncAudioButton(audio, ui);
+        }).catch(function () {
+          syncAudioButton(audio, ui);
+        });
       });
-    });
 
-    function showError() {
-      ui.err.hidden = false;
-      ui.btn.disabled = true;
-      ui.setLabel(false);
+      audio.addEventListener("error", function showError() {
+        ui.err.hidden = false;
+        ui.btn.disabled = true;
+        ui.setLabel(false);
+      });
     }
-
-    audio.addEventListener("error", showError);
 
     function startHomeAudio() {
       audio.muted = true;
@@ -366,10 +369,10 @@
           if (soundUnlocked() && wantsMusicOn()) {
             audio.muted = false;
           }
-          syncAudioButton(audio, ui);
+          if (ui) syncAudioButton(audio, ui);
         })
         .catch(function () {
-          syncAudioButton(audio, ui);
+          if (ui) syncAudioButton(audio, ui);
         });
     }
 
