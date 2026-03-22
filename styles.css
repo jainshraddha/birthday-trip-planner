@@ -499,6 +499,28 @@ body.page-home .landing__header {
   gap: var(--feed-gap);
 }
 
+/* City carousel: crossfade when swapping boards without a full reload */
+#trip-feed {
+  opacity: 1;
+  transition: opacity 0.36s ease;
+}
+
+#trip-feed.trip-feed--transition-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #trip-feed {
+    transition: none;
+  }
+
+  #trip-feed.trip-feed--transition-out {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
 @media (min-width: 700px) {
   .feed {
     max-width: 720px;

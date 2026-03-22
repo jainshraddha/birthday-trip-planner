@@ -6,10 +6,13 @@
   var STORAGE_ON = "tripBgMusicOn";
   var STORAGE_UNLOCK = "tripBgSoundUnlocked";
 
-  /** Page key → YouTube video id (streams in-page; no download). */
+  /**
+   * YouTube streams — same API volume can sound very different per upload (mastering).
+   * `volume` is the IFrame API level 0–100 (see setVolume).
+   */
   var TRIP_YOUTUBE_IDS = {
-    amsterdam: "bvUTvG0LgaU",
-    paris: "9n-hyA2-FDg",
+    amsterdam: { id: "bvUTvG0LgaU", volume: 20 },
+    paris: { id: "9n-hyA2-FDg", volume: 32 },
   };
 
   var TRIP_MUSIC_SRC = {
@@ -19,6 +22,18 @@
 
   var DEFAULT_AUDIO_VOL = 0.32;
   var DEFAULT_YT_VOL = 32;
+
+  function youtubeTrackForKey(key) {
+    var raw = TRIP_YOUTUBE_IDS[key];
+    if (!raw) return null;
+    if (typeof raw === "string") {
+      return { id: raw, volume: DEFAULT_YT_VOL };
+    }
+    return {
+      id: raw.id,
+      volume: typeof raw.volume === "number" ? raw.volume : DEFAULT_YT_VOL,
+    };
+  }
 
   function musicPageKey() {
     if (document.body.classList.contains("page-home")) return "home";
@@ -110,7 +125,8 @@
     queue.push(callback);
   }
 
-  function initYouTube(videoId, pageKey) {
+  function initYouTube(videoId, pageKey, ytVolume) {
+    var vol = typeof ytVolume === "number" ? ytVolume : DEFAULT_YT_VOL;
     var ui = createUiShell();
     ui.btn.disabled = true;
 
@@ -219,7 +235,7 @@
                 iframe.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
               }
             } catch (e1) {}
-            p.setVolume(DEFAULT_YT_VOL);
+            p.setVolume(vol);
             p.mute();
             p.playVideo();
             if (soundUnlocked() && wantsMusicOn()) {
@@ -227,6 +243,15 @@
             }
             ui.btn.disabled = false;
             syncYtButton();
+            window.__tripMusicTeardown = function () {
+              try {
+                var pl = playerRef.p;
+                if (pl && pl.destroy) pl.destroy();
+              } catch (e0) {
+                /* ignore */
+              }
+              playerRef.p = null;
+            };
           },
           onStateChange: function (ev) {
             var YT = window.YT;
@@ -363,13 +388,46 @@
 
   function init() {
     var key = musicPageKey();
-    var ytId = TRIP_YOUTUBE_IDS[key];
-    if (ytId) {
-      initYouTube(ytId, key);
+    var yt = youtubeTrackForKey(key);
+    if (yt) {
+      initYouTube(yt.id, key, yt.volume);
       return;
     }
     initAudio();
   }
+
+  function teardownMusic() {
+    if (window.__tripMusicTeardown) {
+      try {
+        window.__tripMusicTeardown();
+      } catch (e) {
+        /* ignore */
+      }
+      window.__tripMusicTeardown = null;
+    }
+    document.querySelectorAll(".trip-music").forEach(function (el) {
+      el.remove();
+    });
+    document.querySelectorAll(".trip-music__youtube-host").forEach(function (el) {
+      el.remove();
+    });
+    var aud = document.querySelector("audio.trip-music__audio");
+    if (aud) {
+      try {
+        aud.pause();
+      } catch (e2) {
+        /* ignore */
+      }
+      aud.remove();
+    }
+  }
+
+  window.TripMusic = {
+    reinitForCity: function () {
+      teardownMusic();
+      init();
+    },
+  };
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);

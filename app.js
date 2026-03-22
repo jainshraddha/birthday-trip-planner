@@ -21,17 +21,19 @@
 })();
 
 window.TripApp = window.TripApp || {};
-let feedPinsInitialized = false;
+let feedModalShellReady = false;
 
 window.TripApp.initFeedPins = function () {
-  if (feedPinsInitialized) return;
-  const pins = document.querySelectorAll(".feed__pin--interactive");
-  if (!pins.length) return;
+  const feedRoot = document.getElementById("trip-feed");
   const backdrop = document.getElementById("feed-backdrop");
-  if (!backdrop) return;
-  feedPinsInitialized = true;
+  if (!feedRoot || !backdrop) return;
+  const pins = feedRoot.querySelectorAll(".feed__pin--interactive");
+  if (!pins.length) return;
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!feedModalShellReady) {
+    feedModalShellReady = true;
   const MODAL_EASE = "cubic-bezier(0.25, 0.9, 0.35, 1)";
   const OPEN_MS = 0.26;
 
@@ -330,59 +332,77 @@ window.TripApp.initFeedPins = function () {
     flyFallbackTimer = window.setTimeout(settleOpen, Math.ceil(OPEN_MS * 1000) + 120);
   }
 
-  pins.forEach((article) => {
-    const card = article.querySelector(".feed__pin__card");
-    if (!card) return;
-
-    const isVideo = article.classList.contains("feed__pin--video");
-    if (isVideo) {
-      card.setAttribute("aria-expanded", "false");
-      card.setAttribute("aria-haspopup", "dialog");
-      const wrap = card.querySelector(".feed__pin__media--video");
-      if (wrap && !wrap.querySelector(".feed__pin__video-expand")) {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "feed__pin__video-expand";
-        btn.setAttribute("aria-label", "Open reel in a larger view");
-        btn.textContent = "Expand";
-        wrap.appendChild(btn);
-        btn.addEventListener("click", (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          if (openCard === card) return;
+    function onFeedClick(e) {
+      const expandBtn = e.target.closest(".feed__pin__video-expand");
+      if (expandBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const card = expandBtn.closest(".feed__pin__card");
+        if (card && openCard !== card) {
           openFromCard(card);
-        });
+        }
+        return;
       }
+      const card = e.target.closest(".feed__pin__card");
+      if (!card) return;
+      const article = card.closest(".feed__pin--interactive");
+      if (!article || article.classList.contains("feed__pin--video")) return;
+      if (openCard === card) return;
+      e.preventDefault();
+      openFromCard(card);
     }
 
-    card.addEventListener("click", (e) => {
-      if (openCard === card) return;
-      if (isVideo) return;
-      e.preventDefault();
-      openFromCard(card);
-    });
-
-    card.addEventListener("keydown", (e) => {
+    function onFeedKeydown(e) {
       if (e.key !== "Enter" && e.key !== " ") return;
+      const t = e.target;
+      if (!t || !t.closest) return;
+      const card = t.closest(".feed__pin__card");
+      if (!card) return;
+      const article = card.closest(".feed__pin--interactive");
+      if (!article || article.classList.contains("feed__pin--video")) return;
       if (openCard === card) return;
       e.preventDefault();
       openFromCard(card);
+    }
+
+    feedRoot.addEventListener("click", onFeedClick);
+    feedRoot.addEventListener("keydown", onFeedKeydown);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && openCard) closeModal();
     });
-  });
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && openCard) closeModal();
-  });
+    function onViewportChange() {
+      if (!openCard || !openCard.classList.contains("is-modal-expanded")) return;
+      positionModalCentered(openCard);
+    }
 
-  function onViewportChange() {
-    if (!openCard || !openCard.classList.contains("is-modal-expanded")) return;
-    positionModalCentered(openCard);
+    window.addEventListener("resize", onViewportChange, { passive: true });
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", onViewportChange, { passive: true });
+    }
+
+    window.TripApp.closeFeedModalIfOpen = function () {
+      closeModal();
+    };
   }
 
-  window.addEventListener("resize", onViewportChange, { passive: true });
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener("resize", onViewportChange, { passive: true });
-  }
+  pins.forEach((article) => {
+    if (!article.classList.contains("feed__pin--video")) return;
+    const card = article.querySelector(".feed__pin__card");
+    if (!card) return;
+    card.setAttribute("aria-expanded", "false");
+    card.setAttribute("aria-haspopup", "dialog");
+    const wrap = card.querySelector(".feed__pin__media--video");
+    if (wrap && !wrap.querySelector(".feed__pin__video-expand")) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "feed__pin__video-expand";
+      btn.setAttribute("aria-label", "Open reel in a larger view");
+      btn.textContent = "Expand";
+      wrap.appendChild(btn);
+    }
+  });
 };
 
 if (document.querySelector(".feed__pin--interactive")) {
@@ -390,10 +410,9 @@ if (document.querySelector(".feed__pin--interactive")) {
 }
 
 (function citySlide() {
-  const city = document.body.dataset.city;
   const order = ["amsterdam", "paris", "london"];
-  const idx = order.indexOf(city);
-  if (idx === -1) return;
+  const city = document.body.dataset.city;
+  if (order.indexOf(city) === -1) return;
 
   const SWIPE_MIN = 56;
   const SWIPE_VERTICAL_CAP = 110;
@@ -402,15 +421,27 @@ if (document.querySelector(".feed__pin--interactive")) {
     return document.body.classList.contains("feed-modal-open");
   }
 
+  function currentIdx() {
+    return order.indexOf(document.body.dataset.city);
+  }
+
   function goCity(key) {
+    if (window.TripApp && typeof window.TripApp.switchCity === "function") {
+      window.TripApp.switchCity(key);
+      return;
+    }
     window.location.href = "city.html?city=" + key;
   }
 
   function goNext() {
+    const idx = currentIdx();
+    if (idx === -1) return;
     goCity(order[(idx + 1) % order.length]);
   }
 
   function goPrev() {
+    const idx = currentIdx();
+    if (idx === -1) return;
     goCity(order[(idx - 1 + order.length) % order.length]);
   }
 
@@ -458,6 +489,31 @@ if (document.querySelector(".feed__pin--interactive")) {
     } else if (e.key === "ArrowLeft") {
       e.preventDefault();
       goPrev();
+    }
+  });
+})();
+
+(function cityInternalNavSmooth() {
+  if (!document.body.dataset.city) return;
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented) return;
+    if (e.button !== 0) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const a = e.target.closest("a[href]");
+    if (!a) return;
+    let url;
+    try {
+      url = new URL(a.getAttribute("href"), location.href);
+    } catch (err) {
+      return;
+    }
+    const page = (url.pathname.split("/").pop() || "").toLowerCase();
+    if (page !== "city.html") return;
+    const nextCity = url.searchParams.get("city");
+    if (!nextCity || !window.TRIP_CITY_META || !window.TRIP_CITY_META[nextCity]) return;
+    e.preventDefault();
+    if (window.TripApp && typeof window.TripApp.switchCity === "function") {
+      window.TripApp.switchCity(nextCity);
     }
   });
 })();

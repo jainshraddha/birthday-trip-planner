@@ -161,32 +161,9 @@
     <p id="trip-footer-text">De Pijp</p>
   </footer>
 
-  <script>
-    (function () {
-      var q = new URLSearchParams(location.search).get("city");
-      var k = "amsterdam";
-      if (q === "paris") k = "paris";
-      else if (q === "london") k = "london";
-      var m = window.TRIP_CITY_META[k];
-      document.body.className = m.bodyClass;
-      document.body.dataset.city = m.dataCity;
-      document.title = m.title;
-      document.querySelectorAll("[data-trip-visible]").forEach(function (el) {
-        el.hidden = el.getAttribute("data-trip-visible") !== k;
-      });
-      document.getElementById("trip-masthead-h1").textContent = m.h1;
-      document.getElementById("trip-masthead-kicker").textContent = m.kicker;
-      document.getElementById("trip-feed").setAttribute("aria-label", m.feedAriaLabel);
-      document.getElementById("trip-map-block").setAttribute("aria-label", m.mapAriaLabel);
-      var ifr = document.getElementById("trip-map-iframe");
-      ifr.src = m.mapEmbedSrc;
-      ifr.title = m.mapIframeTitle;
-      document.getElementById("trip-map-link").href = m.mapLinkHref;
-      document.getElementById("trip-footer-text").textContent = m.footerText;
-    })();
-  </script>
-  <script src="app.js" defer></script>
+  <script src="js/trip-city-apply.js"></script>
   <script src="js/trip-city-page-init.js" defer></script>
+  <script src="app.js" defer></script>
   <script src="js/trip-bg-music.js" defer></script>
 </body>
 </html>
