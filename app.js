@@ -106,7 +106,56 @@ window.TripApp.initFeedPins = function () {
 
   function closeModal() {
     if (!openCard) return;
-    cleanupModalState();
+
+    if (reduceMotion) {
+      cleanupModalState();
+      return;
+    }
+
+    const generation = modalGeneration;
+    const card = openCard;
+    const slot = openSlot;
+
+    if (!slot) {
+      cleanupModalState();
+      return;
+    }
+
+    // First: current modal position
+    const first = card.getBoundingClientRect();
+    // Last: the placeholder slot position
+    const last = slot.getBoundingClientRect();
+
+    const dx = last.left - first.left;
+    const dy = last.top - first.top;
+    const sx = last.width / first.width;
+    const sy = last.height / first.height;
+
+    function finishClose() {
+      if (generation !== modalGeneration) return;
+      card.removeEventListener("transitionend", onEnd);
+      cleanupModalState();
+    }
+
+    function onEnd(e) {
+      if (e.propertyName !== "transform") return;
+      finishClose();
+    }
+
+    card.addEventListener("transitionend", onEnd);
+    // Safety fallback
+    setTimeout(finishClose, Math.ceil(OPEN_MS * 1000) + 150);
+
+    hideBackdrop();
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (generation !== modalGeneration) return;
+        card.style.transition = `transform ${OPEN_MS}s ${MODAL_EASE}, opacity ${OPEN_MS}s ${MODAL_EASE}`;
+        card.style.transform = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+        card.style.opacity = "0";
+      });
+    });
   }
 
   /** Padded usable viewport rect (visualViewport when available). */
@@ -223,6 +272,16 @@ window.TripApp.initFeedPins = function () {
         media.style.maxHeight = mh;
         if (media.classList.contains("feed__pin__media--video")) {
           media.style.height = mh;
+          // Force the iframe to follow the container's calculated dimensions
+          const ifr = media.querySelector("iframe");
+          if (ifr) {
+            // Remove any fixed attributes that might be overriding CSS
+            ifr.removeAttribute("width");
+            ifr.removeAttribute("height");
+            // Set styles explicitly
+            ifr.style.setProperty("width", "100%", "important");
+            ifr.style.setProperty("height", "100%", "important");
+          }
         } else {
           media.style.height = "";
         }
