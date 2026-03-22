@@ -49,9 +49,16 @@
 
     document.getElementById("trip-feed").setAttribute("aria-label", m.feedAriaLabel);
     document.getElementById("trip-map-block").setAttribute("aria-label", m.mapAriaLabel);
-    var ifr = document.getElementById("trip-map-iframe");
-    ifr.src = m.mapEmbedSrc;
-    ifr.title = m.mapIframeTitle;
+    var mapIframe = document.getElementById("trip-map-my-maps-embed");
+    if (mapIframe) {
+      mapIframe.title = m.mapIframeTitle || "Map";
+      mapIframe.setAttribute("aria-label", m.mapAriaLabel || "");
+      if (m.mapMyMapsEmbedSrc) {
+        mapIframe.src = m.mapMyMapsEmbedSrc;
+      } else {
+        mapIframe.src = "about:blank";
+      }
+    }
     document.getElementById("trip-map-link").href = m.mapLinkHref;
     document.getElementById("trip-footer-text").textContent = m.footerText;
   };

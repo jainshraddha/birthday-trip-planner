@@ -1,5 +1,9 @@
 /**
  * Shared config for city.html — feed markup lives in /feed/{amsterdam|paris|london}.html
+ *
+ * Maps: create one Google My Map per city (with your pins), then:
+ * 1. Share → “Embed a map” → copy the iframe’s src URL → mapMyMapsEmbedSrc
+ * 2. Share → “Send a link” (or open the map in Google Maps) → mapLinkHref for “Open this map in Google Maps”
  */
 window.TRIP_CITY_META = {
   amsterdam: {
@@ -18,12 +22,11 @@ window.TRIP_CITY_META = {
     splitImage: "assets/amsterdam-stroopwafels-van-wonderen.png",
     splitImageAlt: "Fresh stroopwafels at an Amsterdam market stall",
     feedAriaLabel: "Ideas for Amsterdam",
-    mapAriaLabel: "Map of De Pijp, Amsterdam",
-    mapIframeTitle: "De Pijp, Amsterdam on Google Maps",
-    mapEmbedSrc:
-      "https://www.google.com/maps?q=De+Pijp,+Amsterdam,+Netherlands&z=14&hl=en&output=embed",
-    mapLinkHref:
-      "https://www.google.com/maps/search/?api=1&query=De+Pijp+Amsterdam+Netherlands",
+    mapAriaLabel: "Map of ideas around De Pijp, Amsterdam",
+    mapIframeTitle: "Ideas map — Amsterdam",
+    mapMyMapsEmbedSrc:
+      "https://www.google.com/maps/d/embed?mid=11qOQntT-Z-7lhU0myLArMsdFKVYE3cc",
+    mapLinkHref: "https://www.google.com/maps/d/viewer?mid=11qOQntT-Z-7lhU0myLArMsdFKVYE3cc",
     footerText: "De Pijp",
   },
   paris: {
@@ -42,13 +45,11 @@ window.TRIP_CITY_META = {
     splitImage: "assets/paris-bouquiniste-notre-dame.png",
     splitImageAlt: "Paris bouquiniste stalls along the river",
     feedAriaLabel: "Ideas for Paris",
-    mapAriaLabel: "Map of Le Marais, Paris",
-    mapIframeTitle: "Le Marais, Paris on Google Maps",
-    /* Same pattern as Amsterdam (De Pijp): named neighborhood in q= so the embed pins the quarter, not generic city centre. */
-    mapEmbedSrc:
-      "https://www.google.com/maps?q=Le+Marais,+Paris,+France&z=15&hl=en&output=embed",
-    mapLinkHref:
-      "https://www.google.com/maps/search/?api=1&query=Le+Marais+Paris+France",
+    mapAriaLabel: "Map of ideas around Le Marais, Paris",
+    mapIframeTitle: "Ideas map — Paris",
+    mapMyMapsEmbedSrc:
+      "https://www.google.com/maps/d/embed?mid=1HA2-F5cgwR1Ov5nepN1gi4I6t0ABAiA",
+    mapLinkHref: "https://www.google.com/maps/d/viewer?mid=1HA2-F5cgwR1Ov5nepN1gi4I6t0ABAiA",
     footerText: "Le Marais",
   },
   london: {
@@ -67,12 +68,11 @@ window.TRIP_CITY_META = {
     splitImage: "assets/london-leadenhall-market.png",
     splitImageAlt: "Leadenhall Market covered arcade in London",
     feedAriaLabel: "Ideas for London",
-    mapAriaLabel: "Map of Covent Garden, London",
-    mapIframeTitle: "Covent Garden, London on Google Maps",
-    mapEmbedSrc:
+    mapAriaLabel: "Map of ideas around Covent Garden, London",
+    mapIframeTitle: "Ideas map — London",
+    mapMyMapsEmbedSrc:
       "https://www.google.com/maps?q=Covent+Garden,+London,+United+Kingdom&z=15&hl=en&output=embed",
-    mapLinkHref:
-      "https://www.google.com/maps/search/?api=1&query=Covent+Garden+London+United+Kingdom",
+    mapLinkHref: "https://www.google.com/maps/search/?api=1&query=Covent+Garden+London+United+Kingdom",
     footerText: "Covent Garden",
   },
 };

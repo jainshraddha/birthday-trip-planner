@@ -691,51 +691,32 @@ body.page-london .page-bg__tint {
   );
 }
 
-/* Reset city defaults; two layers = photo atmosphere + faint map texture */
+/* Home: full-bleed world map (assets/home-world-map-bg.png) */
 body.page-home .page-bg__parallax {
-  background-image: none;
+  background-image: url("assets/home-world-map-bg.png");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
   width: 100vw;
   height: 100vh;
   min-width: 100%;
   min-height: 100%;
   margin-left: -50vw;
   margin-top: -50vh;
-  opacity: 1;
-  filter: none;
-}
-
-/* Golden-hour canal: reads as “journey,” not a cartoon map */
-body.page-home .page-bg__parallax--home-base {
-  background-image: url("assets/amsterdam-canal-golden.png");
-  background-position: center 42%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  opacity: 0.68;
-  filter: blur(2px) saturate(0.88) brightness(0.92);
-}
-
-/* Map only as a whisper; swap/remove this layer if you replace the PNG with a vintage chart */
-body.page-home .page-bg__parallax--home-map {
-  background-image: url("assets/home-world-map-bg.png");
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  opacity: 0.2;
-  filter: grayscale(1) contrast(1.08) blur(1.75px);
-  mix-blend-mode: soft-light;
+  opacity: 0.88;
+  filter: blur(1.5px) sepia(0.14) saturate(0.78) brightness(0.94) contrast(1.03);
 }
 
 body.page-home .page-bg__tint {
-  /* Align with city pages: muted sage / warm neutral wash */
   background: linear-gradient(
     165deg,
-    rgba(200, 208, 198, 0.22) 0%,
-    rgba(165, 172, 168, 0.28) 48%,
-    rgba(72, 78, 74, 0.42) 100%
+    rgba(88, 82, 72, 0.25) 0%,
+    rgba(62, 58, 52, 0.32) 45%,
+    rgba(36, 34, 30, 0.48) 100%
   );
 }
 
-/* Soft vignette + faint spotlight so the first view feels “lit,” not flat */
+/* Vignette: keep map readable while the card stays the focus */
 body.page-home .page-bg::after {
   content: "";
   position: absolute;
@@ -744,11 +725,11 @@ body.page-home .page-bg::after {
   pointer-events: none;
   background:
     radial-gradient(
-      ellipse 72% 58% at 50% 42%,
-      rgba(255, 252, 246, 0.14) 0%,
-      transparent 62%
+      ellipse 78% 62% at 50% 44%,
+      rgba(255, 252, 246, 0.08) 0%,
+      transparent 58%
     ),
-    radial-gradient(ellipse 105% 95% at 50% 50%, transparent 40%, rgba(38, 32, 26, 0.22) 100%);
+    radial-gradient(ellipse 108% 98% at 50% 50%, transparent 35%, rgba(24, 22, 20, 0.35) 100%);
 }
 
 body.page-home {
@@ -758,7 +739,7 @@ body.page-home {
   align-items: center;
   min-height: 100vh;
   min-height: 100dvh;
-  background: #2a2826;
+  background: #1e1c1a;
   color: var(--city-ink);
 }
 
@@ -1040,7 +1021,14 @@ body.page-home .landing-cta:focus-visible {
   background: #e8e6e1;
 }
 
-.map-block__frame iframe {
+/* Google My Maps embed: fixed height so the iframe has a real box */
+.map-block__frame.map-block__frame--embed {
+  aspect-ratio: unset;
+  min-height: 280px;
+  height: clamp(280px, 52vh, 420px);
+}
+
+.trip-map-my-maps-embed {
   display: block;
   position: absolute;
   inset: 0;

@@ -190,18 +190,19 @@
     <main class="feed" id="trip-feed" aria-label="Trip vibes"></main>
 
     <section class="map-block" id="trip-map-block" aria-label="Map">
-      <div class="map-block__frame">
+      <div class="map-block__frame map-block__frame--embed" id="trip-map-frame">
         <iframe
-          id="trip-map-iframe"
+          id="trip-map-my-maps-embed"
+          class="trip-map-my-maps-embed"
           title="Map"
           src="about:blank"
           loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
+          referrerpolicy="strict-origin-when-cross-origin"
           allowfullscreen
         ></iframe>
       </div>
       <p class="map-block__note">
-        <a id="trip-map-link" href="#" rel="noopener noreferrer" target="_blank">Open in Google Maps</a>
+        <a id="trip-map-link" href="#" rel="noopener noreferrer" target="_blank">Open this map in Google Maps</a>
       </p>
     </section>
 
