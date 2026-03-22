@@ -393,6 +393,115 @@ window.TripApp.initFeedPins = function () {
 
     card.addEventListener("transitionend", onEnd);
     flyFallbackTimer = window.setTimeout(settleOpen, Math.ceil(OPEN_MS * 1000) + 120);
+
+    // Swipe-to-dismiss implementation
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let isSwiping = false;
+
+    const onTouchStart = (e) => {
+      if (e.touches.length !== 1) return;
+      if (e.target.closest("button, a, iframe, .feed__pin__video-expand")) return;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      currentX = startX;
+      currentY = startY;
+      isSwiping = true;
+      card.style.transition = "none";
+    };
+
+    const onTouchMove = (e) => {
+      if (!isSwiping) return;
+      currentX = e.touches[0].clientX;
+      currentY = e.touches[0].clientY;
+      const diffX = currentX - startX;
+      const diffY = currentY - startY;
+      
+      card.style.transform = `translate3d(${diffX}px, ${diffY}px, 0)`;
+      const dist = Math.sqrt(diffX * diffX + diffY * diffY);
+      const opacity = Math.max(0.3, 1 - (dist / 400));
+      backdrop.style.opacity = opacity;
+    };
+
+    const onTouchEnd = () => {
+      if (!isSwiping) return;
+      isSwiping = false;
+      const diffX = currentX - startX;
+      const diffY = currentY - startY;
+      const threshold = 100;
+
+      if (Math.abs(diffX) > threshold || Math.abs(diffY) > threshold) {
+        closeModal();
+      } else {
+        card.style.transition = `transform 0.3s ${MODAL_EASE}`;
+        card.style.transform = "translate3d(0, 0, 0)";
+        backdrop.style.opacity = "";
+      }
+    };
+
+    card.addEventListener("touchstart", onTouchStart, { passive: true });
+    card.addEventListener("touchmove", onTouchMove, { passive: true });
+    card.addEventListener("touchend", onTouchEnd, { passive: true });
+
+    // Mouse-based drag support
+    let isMouseDown = false;
+    const onMouseDown = (e) => {
+      if (e.button !== 0) return;
+      if (e.target.closest("button, a, iframe, .feed__pin__video-expand")) return;
+      startX = e.clientX;
+      startY = e.clientY;
+      currentX = startX;
+      currentY = startY;
+      isMouseDown = true;
+      card.style.transition = "none";
+      card.style.cursor = "grabbing";
+    };
+    const onMouseMove = (e) => {
+      if (!isMouseDown) return;
+      currentX = e.clientX;
+      currentY = e.clientY;
+      const diffX = currentX - startX;
+      const diffY = currentY - startY;
+      card.style.transform = `translate3d(${diffX}px, ${diffY}px, 0)`;
+      const dist = Math.sqrt(diffX * diffX + diffY * diffY);
+      const opacity = Math.max(0.3, 1 - (dist / 400));
+      backdrop.style.opacity = opacity;
+    };
+    const onMouseUp = () => {
+      if (!isMouseDown) return;
+      isMouseDown = false;
+      card.style.cursor = "";
+      const diffX = currentX - startX;
+      const diffY = currentY - startY;
+      const threshold = 100;
+      if (Math.abs(diffX) > threshold || Math.abs(diffY) > threshold) {
+        closeModal();
+      } else {
+        card.style.transition = `transform 0.3s ${MODAL_EASE}`;
+        card.style.transform = "translate3d(0, 0, 0)";
+        backdrop.style.opacity = "";
+      }
+    };
+
+    card.addEventListener("mousedown", onMouseDown);
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+
+    // Clean up
+    const originalCleanup = cleanupModalState;
+    cleanupModalState = () => {
+      card.removeEventListener("touchstart", onTouchStart);
+      card.removeEventListener("touchmove", onTouchMove);
+      card.removeEventListener("touchend", onTouchEnd);
+      card.removeEventListener("mousedown", onMouseDown);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+      backdrop.style.opacity = "";
+      cleanupModalState = originalCleanup;
+      cleanupModalState();
+    };
   }
 
     function onFeedClick(e) {
