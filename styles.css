@@ -474,7 +474,6 @@ body.page-london .city-hero__bg {
 
 .city-board {
   position: relative;
-  z-index: 1;
   background: var(--city-paper);
   padding: clamp(2.25rem, 5vw, 3rem) 0 clamp(1.5rem, 4vw, 2.25rem);
 }
@@ -1271,8 +1270,8 @@ body.page-home .landing-cta:focus-visible {
 
 .feed__pin__card.is-modal-expanded .feed__pin__media--video iframe {
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
   border: 0;
 }
 
